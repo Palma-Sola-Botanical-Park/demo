@@ -1,0 +1,1072 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   PSBP.CSS — one stylesheet for the whole site
+   ───────────────────────────────────────────────────────────────────────────
+   REPLACES:  css/site.css  +  css/photo-credits.css
+              + the 1,136 lines of per-page <style> blocks
+              + the 131-line block duplicated into all 230 plant pages
+
+   WHAT THIS IS
+   A tweak, not an overhaul. Same park, same greens, same gold, same
+   typefaces. What changes is the machinery underneath and the weight:
+   lighter, airier, crisper, with hierarchy carried by type and space
+   instead of by boxes and dark slabs.
+
+   THE FIVE RULES
+   1. LIGHT BY DEFAULT. Deep green is INK — headings, links, marks. It is not
+      a background. The old site painted whole sections #1a3a1f, which is
+      what made it feel heavy. Dark is now rationed: the footer, and at most
+      one deliberate moment per page.
+   2. ONE CARD. There were twenty card and panel components across ten pages,
+      all doing the same job with different corners and shadows. There is now
+      `.card` with modifiers. Adding a card must never mean adding CSS.
+   3. HAIRLINES, NOT SHADOWS. A 1px rule reads crisper and lighter than a
+      blurred drop shadow. Shadow is reserved for things that genuinely float
+      (the nav, an open panel).
+   4. SPACE IS THE DESIGN. Section rhythm is generous on purpose. If a layout
+      feels cramped, the answer is space, not a smaller font.
+   5. NO EMOJI AS UI. 103 emoji were doing the work of an icon set across the
+      site. They render differently on every device and read as clip art on a
+      botanical reference. Emoji stay only where they're content, not chrome.
+
+   MIGRATION NOTE — READ BEFORE DELETING ANYTHING
+   The old variable names (--green-deep, --cream, --text-soft, --border …)
+   are kept below as aliases pointing at the new tokens. There are 364
+   inline style="" attributes across the site referencing them. Keeping the
+   aliases means pages can move over one at a time instead of in a big bang,
+   and nothing breaks on the day this file lands. Delete the alias block only
+   once `grep -r "var(--text-soft)" *.html` comes back empty.
+
+   Every class name that js/site.js emits is preserved here. That file writes
+   102 classes (nav, footer, event cards, Right Now flip cards, credit
+   plates); renaming any of them would break the dynamic content, so they are
+   restyled in place rather than replaced.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ───────────────────────────────────────────────────────────── TOKENS ──── */
+:root {
+  /* Surfaces — three, and only three. Warm, paper-like, never gray. */
+  --paper:        #fdfcf8;   /* the page itself */
+  --surface:      #ffffff;   /* anything raised off the page */
+  --wash:         #f2f5ee;   /* pale green band, replaces dark section slabs */
+  --sunk:         #f6f3ea;   /* faint sand band, for alternating rhythm */
+
+  /* Ink */
+  --ink:          #23241f;   /* body text — softened from pure black */
+  --ink-soft:     #5c5f56;   /* secondary text, captions */
+  --ink-faint:    #8a8d82;   /* timestamps, fine print (AA at 15px+) */
+
+  /* Brand — green is ink and accent, not a background */
+  --green-ink:    #1a3a1f;   /* headings */
+  --green:        #2d6a35;   /* links, labels, marks */
+  --green-lift:   #4a9e56;   /* highlights, active states */
+  --green-tint:   #e7f0e5;   /* the lightest usable green fill */
+
+  --gold:         #b5851f;   /* accent rules, emphasis. Darkened from #c5922a
+                                so it clears 4.5:1 on paper as text. */
+  --gold-mark:    #c5922a;   /* decorative only — rules, dots, never text */
+  --gold-tint:    #fbf3df;
+
+  /* Semantic — used ONLY for safety/status, never decoration */
+  --warn:         #7a5410;  --warn-tint: #fdf4e3;  --warn-line: #e3c98a;
+  --stop:         #8a3a22;  --stop-tint: #fbeee9;  --stop-line: #ddb0a0;
+  --ok:           #33621f;  --ok-tint:   #eef5e9;  --ok-line:   #b9d3ab;
+
+  /* Lines */
+  --rule:         #e6e2d6;
+  --rule-strong:  #d3cebd;
+
+  /* Type */
+  --serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --sans:  'Source Sans 3', -apple-system, 'Segoe UI', sans-serif;
+
+  --t-cap:   .78rem;   /* eyebrows, labels — was .70rem; 11px was too small to read */
+  --t-xs:    .82rem;
+  --t-sm:    .93rem;
+  --t-base: 1.0625rem; /* 17px — body */
+  --t-md:   1.2rem;
+  --t-lg:   1.45rem;
+  --t-xl:   1.9rem;
+  --t-2xl:  2.5rem;
+  --t-3xl:  clamp(2.1rem, 5vw, 3.2rem);
+
+  /* Space — a 4px-based scale. Use these, don't invent values. */
+  --s1: .25rem; --s2: .5rem;  --s3: .75rem; --s4: 1rem;
+  --s5: 1.5rem; --s6: 2rem;   --s7: 3rem;   --s8: 4rem;  --s9: 6rem;
+
+  /* Shape */
+  --r-sm: 8px; --r: 12px; --r-lg: 18px; --r-pill: 999px;
+
+  /* Elevation — only for things that actually float */
+  --lift:      0 2px 10px rgba(26,46,26,.07);
+  --lift-high: 0 12px 34px rgba(26,46,26,.14);
+
+  /* Measure */
+  --measure: 68ch;
+  --wide: 1160px;
+
+  --nav-h: 64px;
+
+  /* How much of the hero photograph shows through the green. See .page-hero-bg. */
+  --hero-veil: .28;
+
+  /* Vertical air on a tone-only section. One dial: 6rem (the .section standard)
+     reads generous on a content-heavy page and cavernous on a light one; 3.75rem
+     — what two pages patched in locally — was tight. Raise or lower here. */
+  --section-pad: 4.5rem;
+
+  /* ── LEGACY ALIASES — see MIGRATION NOTE. Safe to keep indefinitely. ── */
+  --green-deep: var(--green-ink);
+  --green-mid:  var(--green);
+  --green-light:var(--green-lift);
+  --green-pale: var(--green-tint);
+  --gold-light: #eabc5a;
+  --cream:      var(--paper);
+  --sand:       var(--sunk);
+  --text:       var(--ink);
+  --text-soft:  var(--ink-soft);
+  --white:      var(--surface);
+  --border:     var(--rule);
+}
+
+/* ───────────────────────────────────────────────────────────── RESET ──── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  font-size: var(--t-base);
+  line-height: 1.7;
+  color: var(--ink);
+  background: var(--paper);
+  padding-top: var(--nav-h);
+  -webkit-font-smoothing: antialiased;
+}
+/* Every #anchor jump site-wide lands under the fixed nav with no breathing
+   room by default — the browser scrolls the target flush to the viewport
+   top, and --nav-h worth of fixed nav then covers it. One rule, on every
+   element with an id, fixes every nav dropdown link and #anchor at once
+   instead of hand-patching each section's own padding (species-v2.css
+   already uses this same nav-h + 1.5rem convention for plant/wildlife
+   pages — this brings the rest of the site in line). 2026-09-15. */
+[id] { scroll-margin-top: calc(var(--nav-h) + 1.5rem); }
+
+img, svg, video { max-width: 100%; display: block; }
+a { color: var(--green); text-decoration: none; }
+a:hover { text-decoration: underline; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; border-radius: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+
+/* ────────────────────────────────────────────────────────── TYPOGRAPHY ── */
+h1, h2, h3, h4 { font-family: var(--serif); line-height: 1.15; color: var(--green-ink); font-weight: 700; }
+h1 { font-size: var(--t-3xl); letter-spacing: -.01em; }
+h2 { font-size: var(--t-2xl); }
+h3 { font-size: var(--t-lg); }
+h4 { font-size: var(--t-md); }
+
+/* Species names stay in the sans — they sit beside photographer names and
+   the two should feel like one voice. */
+.sci-name { font-style: italic; color: var(--ink-soft); font-size: var(--t-sm); }
+.species-name { font-family: var(--sans); font-weight: 700; color: var(--green-ink); }
+
+.label {
+  display: inline-block; font-size: var(--t-cap); font-weight: 700;
+  letter-spacing: .11em; text-transform: uppercase;
+  color: var(--green); margin-bottom: var(--s2);
+}
+.label-light { color: var(--gold-mark); }
+
+.prose { max-width: var(--measure); }
+.prose p + p { margin-top: var(--s4); }
+.prose p { font-size: var(--t-base); line-height: 1.75; }
+.lede { font-size: var(--t-md); line-height: 1.75; color: var(--ink-soft); max-width: var(--measure); }
+
+.text-soft { color: var(--ink-soft); }
+.text-fine { font-size: var(--t-xs); color: var(--ink-faint); }
+.center { text-align: center; }
+.italic { font-style: italic; }
+
+/* A gold rule above a heading — the site's one recurring ornament. */
+.rule-mark::before {
+  content: ''; display: block; width: 34px; height: 3px;
+  background: var(--gold-mark); border-radius: 2px; margin-bottom: var(--s3);
+}
+
+/* ────────────────────────────────────────────────────────────── LAYOUT ── */
+.section { padding: var(--s9) var(--s5); }
+.section--tight { padding: var(--s7) var(--s5); }
+
+/* A <section> that carries only a tone class — <section class="bg-cream"> —
+   used to get NO padding at all: the tone classes paint a background and
+   nothing else. Three pages hit this and two of them grew their own local
+   patch; visit.html never did, so its sections ran edge to edge.
+   The :not() list matters. This selector is 0,1,1 and would otherwise beat a
+   page's own 0,1,0 class rule from a later stylesheet — the same specificity
+   trap that had .page-hero repainting gold buttons gold-on-gold. */
+section[class*="bg-"]:not(.section):not(.section--tight):not(.cx-sec) {
+  padding: var(--section-pad) var(--s5);
+}
+@media (max-width: 700px) {
+  section[class*="bg-"]:not(.section):not(.section--tight):not(.cx-sec) {
+    padding: var(--s7) var(--s4);
+  }
+}
+.section-inner, .container { max-width: var(--wide); margin: 0 auto; }
+.section-head { max-width: var(--measure); margin-bottom: var(--s6); }
+.section-title { font-size: var(--t-2xl); color: var(--green-ink); margin-bottom: var(--s3); }
+.section-sub { font-size: var(--t-base); color: var(--ink-soft); max-width: var(--measure); line-height: 1.75; }
+
+/* Section tones. Note what's missing: there is no dark section class for
+   general use. Alternate paper / wash / sunk instead — that's the "airier". */
+.bg-paper { background: var(--paper); }
+.bg-white { background: var(--surface); }
+.bg-wash  { background: var(--wash); }
+.bg-sunk  { background: var(--sunk); }
+/* Legacy tone names used across the existing pages, remapped light. */
+.bg-cream { background: var(--paper); }
+.bg-sand  { background: var(--sunk); }
+.bg-pale  { background: var(--wash); }
+/* Kept for the one deliberate dark moment per page. Use sparingly. */
+.bg-deep, .bg-mid { background: var(--green-ink); color: rgba(255,255,255,.86); }
+.bg-deep h1, .bg-deep h2, .bg-deep h3, .bg-deep .section-title { color: #fff; }
+.bg-deep .section-sub, .bg-deep p { color: rgba(255,255,255,.78); }
+.bg-deep .label { color: var(--gold-light); }
+/* :not(.btn) matters. This rule is 0,1,1 and .btn-gold is 0,1,0, so without the
+   exclusion it repainted BUTTON text gold-light — gold on gold, inside any deep
+   section. Found on venue.html 2026-09-04, where the phone number in the "Ready
+   to book?" CTA was barely legible. Link color has no business reaching into a
+   button component; buttons carry their own foreground. */
+.bg-deep a:not(.btn) { color: var(--gold-light); }
+
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--s6); }
+.grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: var(--s5); }
+.grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: var(--s5); }
+.grid-auto { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--s5); }
+.stack { display: flex; flex-direction: column; gap: var(--s4); }
+.row { display: flex; gap: var(--s4); flex-wrap: wrap; }
+.row--center { justify-content: center; }
+
+.mt-1 { margin-top: var(--s4); } .mt-2 { margin-top: var(--s6); } .mt-3 { margin-top: var(--s7); }
+.mb-2 { margin-bottom: var(--s6); }
+.divider { border: none; border-top: 1px solid var(--rule); margin: var(--s6) 0; }
+
+@media (max-width: 900px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .section { padding: var(--s7) var(--s4); }
+}
+
+/* ─────────────────────────────────────────────────────────────── CARD ──── */
+/* ONE card. Modifiers, not new components. This replaces: .info-card,
+   .door-card, .give-path, .tier-card, .perk-panel, .area-card, .tour-card,
+   .news-square, .nl-card, .class-card, .series-card, .wildlife-card and the
+   rest of the twenty. */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  padding: var(--s5);
+  display: flex; flex-direction: column; gap: var(--s2);
+  min-width: 0;
+}
+.card > h3, .card > h4 { margin-bottom: var(--s1); }
+.card p { font-size: var(--t-sm); color: var(--ink-soft); line-height: 1.65; }
+.card--flush { padding: 0; overflow: hidden; }
+.card--pad   { padding: var(--s6); }
+
+/* Clickable card: the whole tile is the target. */
+a.card, .card--link { color: inherit; transition: border-color .18s, transform .18s, box-shadow .18s; }
+a.card:hover, .card--link:hover {
+  text-decoration: none; border-color: var(--green);
+  transform: translateY(-3px); box-shadow: var(--lift);
+}
+.card__go { margin-top: auto; padding-top: var(--s2); font-weight: 700; color: var(--green); font-size: var(--t-sm); }
+
+/* Accent edges — the only variation a card gets. */
+.card--top    { border-top: 3px solid var(--green); }
+.card--top-gold { border-top: 3px solid var(--gold-mark); }
+.card--left   { border-left: 4px solid var(--green); }
+.card--left-gold { border-left: 4px solid var(--gold-mark); }
+.card--feature { border: 2px solid var(--gold-mark); }
+
+.card__eyebrow { font-size: var(--t-cap); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--green); }
+.card__title { font-family: var(--serif); font-size: var(--t-lg); color: var(--green-ink); line-height: 1.15; }
+.card__price { font-family: var(--serif); font-size: var(--t-2xl); color: var(--green-ink); line-height: 1; }
+.card__per { font-size: var(--t-sm); color: var(--ink-soft); }
+.card__list { list-style: none; display: flex; flex-direction: column; gap: var(--s2); }
+.card__list li { font-size: var(--t-sm); line-height: 1.55; padding-left: var(--s5); position: relative; }
+.card__list li::before {
+  content: ''; position: absolute; left: 0; top: .6em;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--gold-mark);
+}
+
+/* Legacy hook: site.js and every existing page still write .info-card. */
+.info-card {
+  background: var(--surface); border: 1px solid var(--rule);
+  border-top: 3px solid var(--green);
+  border-radius: var(--r); padding: var(--s5);
+}
+.info-card h3 { font-size: var(--t-md); margin-bottom: var(--s1); }
+.info-card p, .info-card li { font-size: var(--t-sm); color: var(--ink-soft); line-height: 1.65; }
+.info-card ul { padding-left: 1.1rem; }
+.info-card-icon { font-size: 1.5rem; margin-bottom: var(--s2); }
+
+/* ────────────────────────────────────────────────────────────── PANEL ──── */
+/* A tinted callout. Reserved for genuine status — safety, warnings, notes.
+   If it isn't communicating a state, it should be a .card or plain prose. */
+.panel {
+  border-radius: var(--r); padding: var(--s5);
+  border: 1px solid var(--rule); border-left-width: 5px;
+  background: var(--surface);
+}
+.panel__flag { font-size: var(--t-cap); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: var(--s2); }
+.panel p { font-size: var(--t-base); line-height: 1.7; }
+.panel--note { background: var(--gold-tint); border-color: var(--gold-mark); }
+.panel--note .panel__flag { color: var(--gold); }
+.panel--ok   { background: var(--ok-tint);   border-color: var(--ok-line); }
+.panel--ok   .panel__flag { color: var(--ok); }
+.panel--warn { background: var(--warn-tint); border-color: var(--warn-line); }
+.panel--warn .panel__flag { color: var(--warn); }
+.panel--stop { background: var(--stop-tint); border-color: var(--stop-line); }
+.panel--stop .panel__flag { color: var(--stop); }
+
+/* ───────────────────────────────────────────────────────────── BUTTONS ── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  min-height: 44px; padding: 0 var(--s5);
+  border: 1px solid transparent; border-radius: var(--r-sm);
+  font-size: var(--t-sm); font-weight: 700; cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+  text-align: center;
+}
+.btn:hover { text-decoration: none; }
+.btn-green, .btn--primary { background: var(--green-ink); color: #fff; }
+.btn-green:hover, .btn--primary:hover { background: var(--green); }
+.btn-gold, .btn--accent { background: var(--gold-mark); color: #3a2a00; }
+.btn-gold:hover, .btn--accent:hover { background: var(--gold-light); }
+.btn-outline, .btn--ghost { background: transparent; border-color: var(--rule-strong); color: var(--green-ink); }
+.btn-outline:hover, .btn--ghost:hover { border-color: var(--green); background: var(--surface); }
+.bg-deep .btn-outline { border-color: rgba(255,255,255,.45); color: #fff; }
+.bg-deep .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,.08); }
+.btn-sm { min-height: 38px; padding: 0 var(--s4); font-size: var(--t-xs); }
+.btn--block { width: 100%; }
+
+/* ──────────────────────────────────────────────────── CHIPS / TAGS ────── */
+.chip, .tag {
+  display: inline-flex; align-items: center;
+  font-size: var(--t-xs); font-weight: 700; line-height: 1;
+  padding: .4rem .7rem; border-radius: var(--r-pill);
+  background: var(--green-tint); color: var(--green-ink);
+  white-space: nowrap;
+}
+.chip--quiet, .tag-nonnative { background: var(--sunk); color: var(--ink-soft); }
+.tag-native   { background: var(--green-tint); color: var(--ok); }
+.tag-butterfly{ background: #ece6f2; color: #58497a; }
+.tag-edible   { background: var(--ok-tint);   color: var(--ok); }
+.tag-toxic    { background: var(--warn-tint); color: var(--warn); }
+.tag-invasive { background: var(--stop-tint); color: var(--stop); }
+.tag-wetland  { background: #dfeae7; color: #2d5e50; }
+.tag-bird     { background: var(--green-tint); color: var(--ok); }
+.tag-reptile  { background: var(--gold-tint); color: var(--warn); }
+.tag-insect   { background: #f6e4ec; color: #7d2b50; }
+.free-tag { background: var(--gold-mark); color: #3a2a00; font-weight: 800; padding: .2rem .6rem; border-radius: var(--r-sm); display: inline-block; }
+
+/* ─────────────────────────────────────────────────── FILTER CONTROLS ──── */
+.filter-bar {
+  display: flex; flex-wrap: wrap; gap: var(--s3); align-items: center;
+  background: var(--surface); border: 1px solid var(--rule);
+  border-radius: var(--r); padding: var(--s3); margin-bottom: var(--s5);
+}
+.filter-bar input[type="search"], .filter-bar input {
+  flex: 1; min-width: 200px; min-height: 44px; padding: 0 var(--s4);
+  border: 1px solid var(--rule); border-radius: var(--r-sm);
+  background: var(--paper); color: var(--green-ink); font-size: var(--t-sm);
+}
+.filter-bar input::placeholder { color: var(--ink-faint); }
+.filter-bar input:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(45,106,53,.14); background: var(--surface); }
+.filter-btn, .filter-select, .ev-filter-btn {
+  min-height: 44px; padding: 0 var(--s4);
+  border: 1px solid var(--rule); border-radius: var(--r-sm);
+  background: var(--paper); color: var(--green); font-size: var(--t-sm); font-weight: 600;
+  cursor: pointer; transition: all .15s;
+  display: inline-flex; align-items: center;
+}
+.filter-btn:hover, .filter-select:hover, .ev-filter-btn:hover { border-color: var(--green); background: var(--surface); color: var(--green-ink); }
+.filter-btn.on, .ev-filter-btn.active { background: var(--green); border-color: var(--green); color: #fff; }
+.filter-select { appearance: none; padding-right: 2rem;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='%232d6a35' d='M0 0l5 6 5-6z'/></svg>");
+  background-repeat: no-repeat; background-position: right .75rem center; }
+
+/* ──────────────────────────────────────────────────────────── MEDIA ───── */
+/* A photograph with its credit in a darkened band across the bottom. This is
+   the site's signature move — the photographer is named on the image, not in
+   a footnote. Used by the plant hero, page heroes, and photo tiles. */
+.media { position: relative; overflow: hidden; border-radius: var(--r); background: var(--sunk); }
+.media img { width: 100%; height: 100%; object-fit: cover; }
+.media__scrim {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 46%;
+  background: linear-gradient(to top, rgba(8,18,9,.90) 0%, rgba(8,18,9,.68) 38%, rgba(8,18,9,.28) 70%, rgba(8,18,9,0) 100%);
+  pointer-events: none;
+}
+.media__credit {
+  position: absolute; left: 0; bottom: 0; z-index: 2;
+  padding: 0 var(--s4) var(--s4); color: #fff; pointer-events: none; max-width: min(70%, 30rem);
+}
+.media__credit span { display: block; }
+.media__credit .lbl  { font-size: var(--t-cap); font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--gold-light); }
+.media__credit .who  { font-size: var(--t-md); font-weight: 700; line-height: 1.2; }
+.media__credit .meta { font-size: var(--t-xs); color: rgba(255,255,255,.85); }
+
+/* ── Attribution primitives (were css/photo-credits.css). js/photo-credits.js
+      emits these exact class names — do not rename. ── */
+.photo-attr {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: var(--s3) var(--s4);
+  background: linear-gradient(transparent, rgba(8,18,9,.55) 35%, rgba(8,18,9,.86));
+  color: #fff; display: flex; flex-direction: column; gap: .25rem;
+}
+.photo-attr .attr-species { font-size: var(--t-sm); font-weight: 600; line-height: 1.3; }
+.photo-attr .attr-species em { font-style: italic; font-weight: 400; opacity: .9; }
+.photo-attr .attr-line { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem .5rem; font-size: var(--t-xs); }
+.photo-attr .attr-by { font-weight: 700; color: var(--gold-light); }
+.photo-attr .attr-src { opacity: .7; font-style: italic; }
+.photo-attr .attr-dot { opacity: .45; }
+
+.species-tag {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: var(--s5) var(--s4) var(--s3);
+  background: linear-gradient(transparent, rgba(8,18,9,.78));
+  color: #fff;
+}
+.species-tag .attr-species { font-size: var(--t-sm); font-weight: 600; line-height: 1.28; }
+.species-tag .attr-species em { font-style: italic; font-weight: 400; opacity: .9; }
+
+.credit-plate {
+  display: grid; grid-template-columns: 1fr auto; align-items: center;
+  gap: var(--s2) var(--s3); padding: var(--s3) var(--s4);
+  border-top: 1px solid var(--rule);
+}
+.credit-byline { display: flex; flex-direction: column; gap: .1rem; min-width: 0; }
+.credit-eyebrow { font-size: var(--t-cap); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--green); }
+.credit-name { font-size: var(--t-sm); font-weight: 700; color: var(--green-ink); line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.credit-date { font-size: var(--t-xs); color: var(--ink-faint); }
+.credit-license { display: flex; flex-direction: column; align-items: flex-end; gap: .25rem; }
+.credit-src { font-size: var(--t-cap); font-style: italic; color: var(--ink-faint); }
+
+.cc-badge {
+  display: inline-flex; align-items: stretch; vertical-align: middle;
+  border: 1px solid rgba(255,255,255,.5); border-radius: 3px; overflow: hidden;
+  font-size: var(--t-cap); font-weight: 700; line-height: 1; background: rgba(0,0,0,.4);
+}
+.cc-badge .cc-mark, .cc-badge .cc-term { padding: .3em .44em; display: inline-flex; align-items: center; }
+.cc-badge .cc-mark { font-family: Georgia, serif; text-transform: lowercase; }
+.cc-badge .cc-term { border-left: 1px solid rgba(255,255,255,.28); }
+.credit-plate .cc-badge { border-color: var(--rule-strong); background: var(--paper); color: var(--green-ink); }
+.credit-plate .cc-badge .cc-term { border-left-color: var(--rule); }
+
+/* ── Photo tile: image + name + credit plate. The plant/wildlife grid card. ── */
+.tile, .plant-card, .obs-card {
+  background: var(--surface); border: 1px solid var(--rule); border-radius: var(--r);
+  overflow: hidden; display: flex; flex-direction: column; color: inherit;
+  transition: border-color .18s, transform .18s, box-shadow .18s;
+}
+a.tile:hover, a.plant-card:hover, .obs-card:hover {
+  text-decoration: none; border-color: var(--green);
+  transform: translateY(-3px); box-shadow: var(--lift);
+}
+.tile__img, .obs-card-img { position: relative; aspect-ratio: 4/3; background: var(--sunk); overflow: hidden; }
+.tile__img img { width: 100%; height: 100%; object-fit: cover; transition: transform .45s; }
+a.tile:hover .tile__img img, .plant-card:hover img { transform: scale(1.04); }
+.card-body, .obs-card-body { padding: var(--s4); flex: 1; }
+.plant-card .credit-plate, .tile .credit-plate { margin-top: auto; }
+.obs-species { font-size: var(--t-sm); font-weight: 700; color: var(--green-ink); }
+.obs-by { font-size: var(--t-xs); color: var(--ink-soft); }
+.obs-date { font-size: var(--t-xs); color: var(--ink-faint); }
+
+/* ──────────────────────────────────────────────────────── FACTS LIST ──── */
+/* Short values. Anything that runs to a sentence belongs in prose. */
+.facts { border-top: 1px solid var(--rule); }
+.facts > div { display: grid; grid-template-columns: 8.5rem minmax(0,1fr); gap: var(--s4);
+               padding: var(--s3) 0; border-bottom: 1px solid var(--rule); }
+.facts dt { font-size: var(--t-cap); font-weight: 700; letter-spacing: .11em; text-transform: uppercase; color: var(--green); padding-top: .25rem; }
+.facts dd { font-size: var(--t-base); line-height: 1.6; }
+.facts--stacked > div { grid-template-columns: 1fr; gap: .1rem; }
+.facts--stacked dt { padding-top: 0; }
+@media (max-width: 560px) { .facts > div { grid-template-columns: 1fr; gap: .1rem; } .facts dt { padding-top: 0; } }
+
+/* Stat row — the iNaturalist counts. */
+.stats { display: flex; gap: var(--s6); flex-wrap: wrap; }
+/* Centred variant — for a stat row under a centred section heading. */
+.stats--center { justify-content: center; }
+.stat { min-width: 6rem; }
+.stat strong { display: block; font-family: var(--serif); font-size: var(--t-xl); color: var(--green-ink); line-height: 1; }
+.stat span { font-size: var(--t-cap); text-transform: uppercase; letter-spacing: .1em; color: var(--ink-soft); }
+.bg-deep .stat strong { color: var(--gold-light); }
+.bg-deep .stat span { color: rgba(255,255,255,.6); }
+.pulse { animation: pulse 1.6s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .35 } }
+
+/* ─────────────────────────────────────────────────────────────── NAV ──── */
+#site-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 900; height: var(--nav-h);
+  background: var(--green-ink);
+  display: flex; align-items: center; justify-content: space-between; padding: 0 var(--s5);
+}
+.nav-logo { display: flex; align-items: center; gap: var(--s3); }
+.nav-logo img { height: 46px; }
+.nav-logo span { color: #fff; font-family: var(--serif); font-size: var(--t-sm); line-height: 1.15; display: none; }
+.nav-links { display: flex; gap: var(--s1); list-style: none; }
+.nav-links a {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--s3);
+  color: rgba(255,255,255,.80); font-size: var(--t-sm); font-weight: 600;
+  border-bottom: 2px solid transparent; transition: color .15s;
+}
+.nav-links a:hover, .nav-links a.active { color: #fff; border-bottom-color: var(--gold-mark); text-decoration: none; }
+.nav-cta {
+  background: var(--gold-mark); color: #3a2a00 !important; border-radius: var(--r-pill);
+  padding: 0 var(--s4) !important; border-bottom: none !important;
+}
+.nav-cta:hover { background: var(--green); }
+.nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: var(--s2); flex-direction: column; gap: 5px; }
+.nav-hamburger span { display: block; width: 24px; height: 2px; background: #fff; }
+.nav-mobile { display: none; position: fixed; top: var(--nav-h); left: 0; right: 0; z-index: 899;
+  background: var(--surface); border-bottom: 1px solid var(--rule); padding: var(--s2) 0; box-shadow: var(--lift); }
+.nav-mobile.open { display: block; }
+.nav-mobile a { display: flex; align-items: center; min-height: 48px; padding: 0 var(--s5); color: var(--ink); font-weight: 600; }
+.nav-mobile a:hover { background: var(--wash); text-decoration: none; }
+@media (max-width: 900px) { .nav-links { display: none; } .nav-hamburger { display: flex; } }
+
+/* ─────────────────────────────────────────────────── ANNOUNCEMENTS ────── */
+#announcements-bar { background: var(--green-tint); border-bottom: 1px solid var(--rule); padding: var(--s2) var(--s5); }
+.announcement-card { display: flex; align-items: center; gap: var(--s3); color: var(--green-ink); }
+.ann-emoji { font-size: 1.15rem; flex-shrink: 0; }
+.ann-body strong { font-size: var(--t-sm); }
+.ann-body p { display: inline; font-size: var(--t-sm); color: var(--ink-soft); margin-left: .35rem; }
+.ann-link { color: var(--green); font-weight: 700; font-size: var(--t-sm); }
+
+/* ──────────────────────────────────────────────────────── iNAT BAR ────── */
+#inat-bar { background: var(--wash); border-bottom: 1px solid var(--rule); padding: var(--s3) var(--s5);
+  display: flex; align-items: center; justify-content: center; gap: var(--s6); flex-wrap: wrap; }
+.inat-bar-stat { text-align: center; }
+.inat-bar-num { display: block; font-family: var(--serif); font-size: var(--t-md); color: var(--green-ink); line-height: 1; }
+.inat-bar-lbl { font-size: var(--t-cap); text-transform: uppercase; letter-spacing: .1em; color: var(--ink-soft); }
+.inat-bar-link { color: var(--green); font-weight: 700; font-size: var(--t-sm); white-space: nowrap; }
+.inat-photos { display: flex; gap: var(--s2); }
+.inat-thumb { width: 44px; height: 44px; border-radius: var(--r-sm); object-fit: cover; border: 1px solid var(--rule); }
+
+/* ──────────────────────────────────────────────── EVENTS (site.js) ────── */
+.event-card {
+  background: var(--surface); border: 1px solid var(--rule); border-left: 4px solid var(--green);
+  border-radius: var(--r); display: flex; gap: var(--s4); padding: var(--s4);
+  color: inherit; transition: border-color .15s, transform .15s;
+}
+.event-card:hover { transform: translateX(3px); border-color: var(--green); text-decoration: none; }
+.event-datebox { background: var(--green-tint); color: var(--green-ink); border-radius: var(--r-sm);
+  padding: var(--s2) var(--s3); min-width: 54px; text-align: center; flex-shrink: 0; }
+.event-datebox .mo { font-size: var(--t-cap); text-transform: uppercase; letter-spacing: .08em; color: var(--green); font-weight: 700; }
+.event-datebox .dy { font-family: var(--serif); font-size: var(--t-lg); line-height: 1; }
+.event-info h4 { font-size: var(--t-sm); margin-bottom: .15rem; }
+.event-info p { font-size: var(--t-xs); color: var(--ink-soft); }
+.event-type { display: inline-block; margin-top: var(--s2); font-size: var(--t-cap); font-weight: 700;
+  text-transform: uppercase; letter-spacing: .08em; padding: .2rem .5rem; border-radius: var(--r-sm);
+  background: var(--green-tint); color: var(--green); }
+.sched-row { background: var(--surface); border: 1px solid var(--rule); border-left: 3px solid var(--green);
+  border-radius: var(--r-sm); padding: var(--s3); }
+.sched-day { font-size: var(--t-cap); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--green); }
+.sched-day span { color: var(--ink-faint); margin-left: .4rem; }
+.sched-body { font-size: var(--t-sm); margin-top: .15rem; line-height: 1.45; }
+.sched-cost { color: var(--warn); }
+.sched-link, .series-link { color: var(--green); font-weight: 600; font-size: var(--t-xs); }
+.series-card { background: var(--surface); border: 1px solid var(--rule); border-top: 3px solid var(--gold-mark);
+  border-radius: var(--r); padding: var(--s4); }
+.series-card h4 { font-size: var(--t-md); margin-bottom: var(--s1); }
+.series-card p { font-size: var(--t-sm); color: var(--ink-soft); line-height: 1.55; }
+
+/* ──────────────────────────── RIGHT NOW flip cards (site.js emits these) ── */
+/* The strip is a fixed three-up, not an auto-fit — deliberately the same
+   shape as .live-mosaic below "What's been seen lately", because the two
+   bands sit on one page and cards of two different widths read as a mistake.
+   auto-fit sized to the CONTAINER, which at this measure fit only two, so the
+   Right Now cards came out visibly larger than the mosaic's. Rotation shows
+   exactly perPage cards, so the column count is known — say it. (2026-08-27) */
+.rn-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s4); }
+.rn-strip.rn-cycling { position: relative; display: block; }
+.rn-page { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s4);
+  position: absolute; inset: 0; opacity: 0; transition: opacity .8s ease; pointer-events: none; }
+.rn-page.on { opacity: 1; pointer-events: auto; position: relative; }
+@media (max-width: 980px) { .rn-strip, .rn-page { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 440px) { .rn-strip, .rn-page { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .rn-page { transition: none; } }
+
+/* padding:0 completes the .card reset. These cards carry `class="card plant-card
+   rn-flip"`, so they inherited .card's padding: var(--s5) and the visible face
+   sat inset ~20px inside its own grid column — narrower than the .mosaic-card
+   band below, which inherits nothing, with gaps that looked 2.5x wider. Same
+   grid, different card box. The flip faces supply their own padding. */
+.rn-flip { background: transparent; border: none; padding: 0; perspective: 1400px; cursor: pointer; border-radius: var(--r); }
+.rn-flip-inner { position: relative; display: grid; min-height: 100%; transform-style: preserve-3d;
+  transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+.rn-flip.is-flipped .rn-flip-inner { transform: rotateY(180deg); }
+.rn-face { grid-area: 1/1; backface-visibility: hidden; border-radius: var(--r); overflow: hidden;
+  background: var(--surface); border: 1px solid var(--rule); display: flex; flex-direction: column; position: relative; }
+.rn-flip:hover .rn-face { border-color: var(--green); }
+.rn-flip-hint { position: absolute; bottom: var(--s2); right: var(--s3); font-size: var(--t-cap); font-weight: 700;
+  color: var(--green); background: rgba(255,255,255,.9); padding: .12rem .45rem; border-radius: var(--r-pill);
+  opacity: 0; transition: opacity .2s; pointer-events: none; }
+.rn-flip:hover .rn-flip-hint { opacity: 1; }
+.rn-back { transform: rotateY(180deg); padding: var(--s4); justify-content: flex-start; }
+.rn-back--flora { background: var(--gold-tint); --rn-wash: var(--gold-tint); }
+.rn-back--fauna { background: var(--green-tint); --rn-wash: var(--green-tint); }
+.rn-wm { position: absolute; right: -10px; bottom: -12px; width: 96px; height: 96px; color: var(--green); opacity: .1; pointer-events: none; }
+.rn-back-eyebrow { font-size: var(--t-cap); font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--green); position: relative; }
+.rn-back-name { font-family: var(--sans); font-size: var(--t-md); font-weight: 700; color: var(--green-ink); line-height: 1.2; margin-top: var(--s1); position: relative; }
+.rn-back-rule { display: block; width: 34px; height: 3px; background: var(--gold-mark); border-radius: 2px; margin: var(--s2) 0 var(--s3); }
+.rn-back-hits { position: relative; }
+.rn-hit { font-size: var(--t-sm); line-height: 1.5; margin-bottom: var(--s2); }
+.rn-hit--soft { color: var(--ink-soft); }
+.rn-back-link { position: relative; display: inline-block; margin-top: var(--s1); font-size: var(--t-sm); font-weight: 700; color: var(--green); }
+.rn-back-foot { position: absolute; bottom: var(--s2); right: var(--s3); font-size: var(--t-cap); font-weight: 700; color: var(--green-ink); opacity: .8; }
+
+/* ───────────────────────────────────────────────────────────── FOOTER ─── */
+/* The site's one permanent dark surface. */
+#site-footer { background: #142718; color: rgba(255,255,255,.62); padding: var(--s8) var(--s5) var(--s5); }
+.footer-grid { max-width: var(--wide); margin: 0 auto var(--s6); display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--s6); }
+.footer-col h4 { color: #fff; font-size: var(--t-cap); text-transform: uppercase; letter-spacing: .12em; margin-bottom: var(--s3); font-family: var(--sans); }
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: var(--s2); }
+.footer-col a, .footer-util a { color: rgba(255,255,255,.62); font-size: var(--t-sm); }
+.footer-col a:hover, .footer-util a:hover { color: var(--gold-light); }
+.footer-brand p { font-size: var(--t-sm); line-height: 1.65; margin-top: var(--s2); }
+.footer-inat { max-width: var(--wide); margin: 0 auto var(--s5); background: rgba(255,255,255,.05);
+  border-radius: var(--r); padding: var(--s4) var(--s5); display: flex; align-items: center;
+  justify-content: space-between; flex-wrap: wrap; gap: var(--s4); }
+.footer-inat-stats { display: flex; gap: var(--s6); flex-wrap: wrap; }
+.footer-inat-stat strong { display: block; font-size: var(--t-md); color: var(--gold-light); font-family: var(--serif); }
+.footer-inat-stat span { font-size: var(--t-cap); text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.5); }
+.footer-bottom { max-width: var(--wide); margin: 0 auto; border-top: 1px solid rgba(255,255,255,.1);
+  padding-top: var(--s4); display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--s3); font-size: var(--t-xs); }
+.social-links { display: flex; gap: var(--s2); }
+.social-link { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.08);
+  display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.7); font-weight: 700; }
+.social-link:hover { background: var(--green); color: #fff; text-decoration: none; }
+@media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .footer-grid { grid-template-columns: 1fr; } }
+
+/* ────────────────────────────────────────────────────────────── TABS ──── */
+.tabs { display: flex; gap: var(--s1); border-bottom: 1px solid var(--rule); margin-bottom: var(--s6); flex-wrap: wrap; }
+.tab-btn {
+  min-height: 48px; padding: 0 var(--s5); background: none; border: none; cursor: pointer;
+  font-family: var(--sans); font-size: var(--t-sm); font-weight: 700; color: var(--ink-soft);
+  border-bottom: 3px solid transparent; margin-bottom: -1px; transition: color .15s;
+}
+.tab-btn:hover { color: var(--green-ink); }
+.tab-btn.active { color: var(--green-ink); border-bottom-color: var(--gold-mark); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ───────────────────────────────────────────────────────── UTILITIES ──── */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.pager { display: flex; align-items: center; justify-content: center; gap: var(--s4); margin-top: var(--s5); flex-wrap: wrap; }
+.pager span { font-size: var(--t-sm); color: var(--ink-soft); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MODULE: page hero  —  added 2026-08-17
+   ───────────────────────────────────────────────────────────────────────────
+   Six pages (contact, events, get-involved, news, venue, visit) open with a
+   photograph behind a deep-green wash. These rules were in site.css and had no
+   equivalent here, so swapping the stylesheet collapsed .page-hero-bg to 0px
+   and the photograph vanished.
+
+   Ported faithfully rather than redesigned: the point of this block is that the
+   one-line stylesheet swap is a no-op visually. Restyling the hero lighter is a
+   separate decision, per page, later.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.page-hero {
+  position: relative; overflow: hidden;
+  background: var(--green-ink);
+  min-height: 170px; display: flex; align-items: center;
+}
+.page-hero-bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  /* The photo lies over --green-ink at this opacity — that is the "fading into
+     green" the heroes have always done. It is ONE DIAL, --hero-veil, because
+     the right level is a judgement that changes with the photograph: a dark
+     canopy shot can carry .38, a bright high-key one washes out the type at
+     the same value. Lower = greener and quieter. Set it here, not per page. */
+  opacity: var(--hero-veil);
+}
+.page-hero-content {
+  position: relative; z-index: 1;
+  padding: var(--s5) var(--s5); max-width: 720px; margin: 0 auto;
+}
+.page-hero h1 { color: #fff; font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom: var(--s2); }
+.page-hero p  { color: rgba(255,255,255,.82); font-size: var(--t-base); line-height: 1.72; margin-bottom: var(--s5); }
+.page-hero .label, .page-hero .label-light { color: var(--gold-light); }
+/* :not(.btn) — same flaw as .bg-deep a below. At 0,1,1 this beat .btn-gold's
+   0,1,0 and repainted the hero's phone button gold-on-gold. A button inside a
+   hero is still a button. */
+.page-hero a:not(.btn) { color: var(--gold-light); }
+/* The photographer credit sits bottom-right over the photo; it is white, so it
+   needs the dark hero to stay behind it. */
+.page-hero-credit {
+  position: absolute; right: var(--s3); bottom: var(--s2); z-index: 3;
+  font-size: var(--t-cap); color: rgba(255,255,255,.82);
+  text-shadow: 0 1px 3px rgba(0,0,0,.65); letter-spacing: .02em;
+}
+
+/* ── Attribution classes emitted at runtime by js/photo-credits.js ────────── */
+.photo-attr .attr-credit { display: inline-flex; flex-wrap: wrap; align-items: center; gap: .35rem; }
+.photo-attr .attr-date   { opacity: .95; }
+.cc-badge--unknown { opacity: .8; }
+
+/* ── Filter-button active colours (nature.html) ───────────────────────────── */
+.filter-btn.on.f-native    { background: var(--green);      border-color: var(--green); }
+.filter-btn.on.f-butterfly { background: #58497a;           border-color: #58497a; }
+.filter-btn.on.f-fruit     { background: var(--gold);       border-color: var(--gold); }
+
+/* ── Announcement bar text — added 2026-08-18 ─────────────────────────────
+   site.js used to hard-code white on these, which was invisible once the bar
+   became pale green. The colours now live here where the stylesheet can own
+   them. .ann-body already had rules; nothing ever emitted the class. ── */
+.ann-body { color: var(--green-ink); }
+.ann-body strong { color: var(--green-ink); font-weight: 700; font-size: var(--t-sm); }
+.ann-note { color: var(--ink-soft); font-size: var(--t-sm); margin-left: .5rem; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MODULE: events  —  added 2026-08-18
+   ───────────────────────────────────────────────────────────────────────────
+   These rules used to live INSIDE js/site.js. A function called
+   injectEventStyles() built a <style id="psbp-event-styles"> tag at runtime and
+   appended it to <head>. Nothing in this stylesheet could reach them, so the
+   events page and the home-page teaser were styled by JavaScript while every
+   other page on the site was styled by CSS. That function is deleted in the
+   same change that adds this block — the two files must ship together.
+
+   WHAT MOVED, AND WHAT DIDN'T
+   Geometry is verbatim. Every padding, width, radius, gap, font-size and shadow
+   is the value site.js was emitting; where a number happened to equal a token
+   on the space scale (1rem -> --s4, .75rem -> --s3) the token is used, which is
+   the same pixel.
+
+   Only COLOUR changed. The block arrived with 31 distinct hex codes and leaves
+   with 7. The 24 that went away were near-misses of tokens defined at the top
+   of this file — three slightly different dark greens all reaching for
+   --green-ink, three greys all reaching for --ink-soft, and a card border one
+   hex digit away from --rule (#e7e2d6 vs #e6e2d6).
+
+   THE 7 THAT STAYED, AND WHY
+   The event badges are a five-color semantic code: free / cost / register /
+   fundraiser / kids. Green and gold exist in this palette; blue, orange and
+   purple do not. Folding those three onto the nearest token would have made
+   three of the five badges look alike, which defeats the point of color-coding
+   them. They keep their own values, marked below. Same for the calendar
+   chevron gray, which has no equivalent here either.
+
+   ONE BUG FIXED IN PASSING
+   .std-date asked for var(--gold-deep), which this file has never defined, so
+   it was silently falling back to a raw #9a7414. It now uses --gold, the
+   text-safe gold that clears 4.5:1 on paper.
+
+   COLOURS STILL SET BY JAVASCRIPT
+   .ev-date has no background here on purpose — site.js sets it inline, per
+   weekday, so each day of the week gets its own color. Same for .ml-dot.
+   Those are data-driven, not design, and belong in the JS.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Event card ─────────────────────────────────────────────────────────── */
+.ev-card {
+  display: flex; gap: var(--s4); align-items: stretch;
+  background: var(--surface); border: 1px solid var(--rule);
+  border-radius: 14px; padding: 0; overflow: hidden;
+  box-shadow: 0 1px 3px rgba(40,50,30,.06);
+  margin-bottom: var(--s4);
+}
+.ev-card .event-info { flex: 1; min-width: 0; padding: .85rem 1.1rem .95rem 0; }
+
+/* The coloured date block. background-color comes from site.js, per weekday. */
+.ev-card .ev-date {
+  flex: 0 0 auto; width: 84px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: .05rem; color: #fff; padding: .6rem .3rem; text-align: center;
+}
+.ev-date .ev-dow  { font-size: .7rem; font-weight: 800; letter-spacing: .08em; opacity: .92; }
+.ev-date .ev-dnum { font-size: 1.7rem; font-weight: 800; line-height: 1; }
+.ev-date .ev-dmo  { font-size: .7rem; font-weight: 700; letter-spacing: .08em; opacity: .92; text-transform: uppercase; }
+.ev-date .ev-dtime {
+  margin-top: .3rem; font-size: .8rem; font-weight: 700; line-height: 1.25;
+  border-top: 1px solid rgba(255,255,255,.4); padding-top: .3rem;
+}
+
+.ev-titlerow { display: flex; justify-content: space-between; align-items: flex-start; gap: .6rem; flex-wrap: wrap; }
+.ev-title { margin: 0; font-size: 1.18rem; line-height: 1.25; flex: 1 1 auto; min-width: 0; }
+.ev-title .ev-instr { font-weight: 500; color: var(--ink-soft); }
+.ev-titlerow .ev-badges { margin: .1rem 0 0; justify-content: flex-end; }
+.ev-card .event-info > p { margin: .45rem 0 0; color: var(--ink-soft); line-height: 1.5; }
+
+/* ── Badges. Five-color semantic code — see header note. ───────────────── */
+.ev-badges { display: flex; flex-wrap: wrap; gap: .4rem; margin: .55rem 0 0; }
+.ev-badge {
+  display: inline-block; font-size: .74rem; font-weight: 700;
+  padding: .2rem .55rem; border-radius: var(--r-pill); white-space: nowrap;
+  background: var(--sunk); color: var(--ink-soft);
+}
+.ev-badge-free { background: var(--green-tint); color: var(--green); }
+.ev-badge-cost { background: var(--gold-tint);  color: var(--warn); }
+.ev-badge-reg  { background: #e2edf6; color: #2b5d86; }  /* blue   — no token */
+.ev-badge-fund { background: #fbe6d6; color: #9a5a1e; }  /* orange — no token */
+.ev-badge-kid  { background: #e8e3f3; color: #5d4a8a; }  /* purple — no token */
+
+.ev-inline-link { color: var(--green); font-weight: 600; white-space: nowrap; }
+.ev-series { margin: .55rem 0 0; font-size: .9rem; color: var(--ink-soft); }
+.ev-series-link { font-weight: 600; color: var(--green); }
+.ev-actions { margin-top: .35rem; }
+
+/* A closed / cancelled day, greyed back. */
+.agenda-closure { background: var(--sunk); }
+.agenda-closure .ev-title { color: var(--ink-soft); }
+
+/* ── Agenda / Calendar view toggle ──────────────────────────────────────── */
+.ev-viewbar { display: flex; justify-content: space-between; align-items: center; gap: var(--s4); flex-wrap: wrap; margin-bottom: var(--s4); }
+.ev-viewtoggle { display: inline-flex; background: var(--sunk); border-radius: var(--r-pill); padding: .2rem; }
+.ev-vbtn {
+  border: 0; background: transparent; font: inherit; font-weight: 700; font-size: .9rem;
+  color: var(--ink-soft); padding: .4rem 1rem; border-radius: var(--r-pill); cursor: pointer;
+}
+.ev-vbtn.active { background: var(--green-ink); color: #fff; }
+
+/* ── "Save the date" card ───────────────────────────────────────────────── */
+.std-card {
+  display: flex; gap: .6rem; align-items: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--warn-line); border-left: 4px solid var(--gold-mark);
+  border-radius: var(--r); padding: .7rem .85rem; margin-bottom: .7rem;
+}
+.std-star { font-size: 1.1rem; line-height: 1.2; }
+.std-body { display: flex; flex-direction: column; min-width: 0; }
+.std-body strong { font-size: 1rem; color: var(--green-ink); }
+.std-date { font-size: .85rem; font-weight: 700; color: var(--gold); margin-top: .1rem; }
+.std-linkrow { margin-top: .3rem; }
+.std-link { font-weight: 600; font-size: .88rem; color: var(--green); }
+
+/* ── Featured band: "Save the Date" across the top of events.html ─────────
+   The flyer is the card. Bev makes artwork for every big event and that
+   artwork carries the times, prices and address — so the poster is shown
+   WHOLE, never cropped to a uniform tile: on our flyers the detail runs
+   along the bottom edge and a crop would eat it. Our three current posters
+   are all portrait within 0.69–0.77, so they line up without help.
+
+   Nothing here is sized below --t-base except .feat-when, which is a short
+   bold date, not reading text.
+   ─────────────────────────────────────────────────────────────────────── */
+/* Centred flex, not a 3-column grid. The band holds one, two or three cards
+   depending on what is flagged, and a fixed grid left two cards hard against
+   the left edge with a column-shaped hole beside them. Flex with a capped
+   width keeps the poster the SAME SIZE at every count and centres the row, so
+   two reads as deliberate rather than as one that failed to load. */
+.feat-grid {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: var(--s4); margin-top: var(--s4);
+}
+.feat-grid > .feat-card { flex: 1 1 240px; max-width: 340px; }
+
+.feat-card {
+  display: flex; flex-direction: column;
+  background: var(--surface); border: 1px solid var(--rule);
+  border-top: 4px solid var(--gold-mark); border-radius: var(--r);
+  overflow: hidden; box-shadow: 0 1px 4px rgba(40,50,30,.07);
+}
+/* A fixed portrait window, and the flyer is CONTAINED in it — never cropped.
+   5:7 (.714) sits in the middle of the real flyers, which run .66–.77, so a
+   normal portrait poster fills it with only a hair of letterboxing.
+
+   The point is what happens when one ISN'T portrait. Letting the image set its
+   own height means a single landscape poster among portraits makes that card
+   short and the whole row ragged. With a fixed window the layout cannot break:
+   a landscape flyer sits in a band across the middle, whole and readable, just
+   small — which reads as "wrong shape" without anything looking broken.
+   Portrait remains the standard; this is the safety net, not permission. */
+.feat-art {
+  /* 5:7 is the default because the park's flyers are portrait. fitBandAspect()
+     in site.js overrides --feat-ar once the posters have loaded, so a band of
+     all-landscape artwork gets a wide, short window instead of three thin
+     strips floating in tall boxes. */
+  background: var(--sunk); line-height: 0; aspect-ratio: var(--feat-ar, 5 / 7);
+  position: relative; overflow: hidden;
+}
+/* Blurred, dimmed copy of the same flyer filling whatever the contained image
+   does not. A portrait poster fills the window, so the backdrop is invisible
+   and costs nothing — it only shows up where there would otherwise be a slab
+   of empty gray, which is the landscape case. Desaturated and held at low
+   opacity so three cards side by side do not turn into three light shows.
+   Same src as the foreground, so it is one network fetch, not two. */
+.feat-art-bg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; filter: blur(20px) saturate(.7);
+  transform: scale(1.2);          /* hides the soft edge the blur leaves */
+  opacity: .42;
+}
+.feat-art-fg { position: relative; width: 100%; height: 100%; display: block; object-fit: contain; }
+
+.feat-body { padding: .9rem 1.05rem 1.05rem; display: flex; flex-direction: column; flex: 1; }
+.feat-when {
+  font-size: .95rem; font-weight: 800; letter-spacing: .03em;
+  text-transform: uppercase; color: var(--gold);
+}
+.feat-title { margin: .25rem 0 0; font-size: 1.3rem; line-height: 1.25; color: var(--green-ink); }
+.feat-desc  { margin: .5rem 0 0; font-size: var(--t-base); line-height: 1.55; color: var(--ink-soft); }
+.feat-actions {
+  margin-top: auto; padding-top: .8rem;
+  display: flex; flex-wrap: wrap; gap: .4rem 1.1rem;
+}
+.feat-link { font-size: var(--t-base); font-weight: 700; color: var(--green); white-space: nowrap; }
+.feat-link-tickets { color: var(--warn); }
+
+/* Standing note above the full calendar, explaining what is deliberately
+   NOT in it. Gold left rule so it reads as guidance, not as a listing. */
+.cal-note {
+  font-size: var(--t-base); line-height: 1.55; color: var(--ink-soft);
+  background: var(--sunk); border-left: 3px solid var(--gold-mark);
+  border-radius: var(--r); padding: .7rem .9rem; margin: 0 0 1.1rem;
+}
+.cal-note a { font-weight: 700; color: var(--green); white-space: nowrap; }
+
+/* ── Full calendar: grouped scrolling list, all screen sizes ────────────── */
+.ml-month { margin-bottom: var(--s2); padding: 0; }
+.ml-title-h {
+  font-size: 1.25rem; margin: .4rem 0 .25rem;
+  position: sticky; top: 0; z-index: 1;
+  background: var(--paper); padding: .2rem 0;
+  border-bottom: 2px solid var(--rule-strong);
+}
+.ml-month:first-child .ml-title-h { margin-top: 0; }
+.ml-row {
+  display: flex; align-items: center; gap: var(--s3); padding: .55rem .3rem;
+  border-bottom: 1px solid var(--rule);
+  text-decoration: none; color: inherit; transition: background .12s;
+}
+a.ml-row:hover { background: var(--sunk); }
+/* .ml-dot background-color is set inline by site.js, per event type. */
+.ml-dot { flex: 0 0 auto; width: 11px; height: 11px; border-radius: 50%; }
+.ml-date { flex: 0 0 auto; width: 72px; font-size: .86rem; font-weight: 700; color: var(--ink-soft); }
+.ml-time { font-weight: 700; color: var(--ink-soft); }
+.ml-title {
+  flex: 1; min-width: 0; font-weight: 600; font-size: 1.02rem; color: var(--green-ink);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ml-closure-reason { font-weight: 500; color: var(--ink-faint); }
+.ml-chev { flex: 0 0 auto; color: #b3b1a4; font-size: 1.2rem; }  /* gray — no token */
+
+@media (max-width: 760px) {
+  .ev-card .ev-date { width: 72px; }
+  .ev-date .ev-dnum { font-size: 1.45rem; }
+  .ev-title { flex-basis: 100%; }
+  .ev-titlerow .ev-badges { justify-content: flex-start; }
+  .ml-title { font-size: .96rem; }
+}
+
+/* ── Visit block — shared by contact.html and visit.html ─────────────────
+   Label/value rows on a dark ground beside a static map. Lifted out of
+   contact.html 2026-09-05 rather than copied, so the two pages cannot drift.
+   Written for a --green-ink background: the type is white throughout.
+   ─────────────────────────────────────────────────────────────────────── */
+/* ── VISIT — was seven cards on dark green, with the address in two places,
+   directions in two places, and the map wedged beside a stack. Now: the four
+   things people actually come here for, beside a map that gets real size. ── */
+.visit-grid{display:grid;grid-template-columns:minmax(280px,1fr) 1.15fr;gap:2.5rem;align-items:stretch}
+@media(max-width:820px){.visit-grid{grid-template-columns:1fr;gap:2rem}}
+.vfacts{margin:0}
+.vfacts > div{display:grid;grid-template-columns:6.5rem 1fr;gap:1.2rem;padding:1.1rem 0;
+  border-top:1px solid rgba(255,255,255,.16)}
+.vfacts > div:last-child{border-bottom:1px solid rgba(255,255,255,.16)}
+.vfacts dt{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold-mark);font-weight:700;padding-top:.2rem}
+.vfacts dd{margin:0;color:#fff;line-height:1.6;font-size:1.02rem}
+.vfacts dd span{display:inline-block;margin-top:.15rem;font-size:.86rem;color:rgba(255,255,255,.6)}
+.vfacts dd a{color:#fff;border-bottom:1px solid rgba(255,255,255,.45);text-decoration:none}
+.vfacts dd a:hover{border-bottom-color:#fff}
+/* Was a Google Maps iframe — which loads the whole Maps application, tiles and
+   all, to show one pin. This is a static image built once from OpenStreetMap
+   tiles (data/scripts has no part in it; see images/park-location-map.png),
+   so it costs one 113 KB request and no third-party JavaScript. Tapping it
+   opens the visitor's own Maps app with turn-by-turn from wherever they are,
+   which is what someone wanting directions actually needs. */
+.vmap{position:relative;display:block;border-radius:12px;overflow:hidden;
+  box-shadow:0 6px 22px rgba(0,0,0,.28);min-height:340px}
+.vmap img{display:block;width:100%;height:100%;min-height:340px;object-fit:cover}
+.vmap-cta{position:absolute;left:1rem;bottom:1rem;background:var(--green-ink);color:#fff;
+  font-weight:600;font-size:.94rem;padding:.6rem 1.1rem;border-radius:999px;
+  box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.vmap:hover .vmap-cta{background:var(--green)}
+.vmap-cred{position:absolute;right:.55rem;bottom:.4rem;font-size:.62rem;
+  color:rgba(0,0,0,.5);background:rgba(255,255,255,.7);padding:.1rem .35rem;border-radius:3px}
+.vdrive{margin:2.2rem auto 0;max-width:60ch;text-align:center;
+  color:rgba(255,255,255,.75);line-height:1.75;font-size:.97rem}
+.vtail{margin-top:2.2rem;padding-top:1.3rem;border-top:1px solid rgba(255,255,255,.16);
+  display:flex;flex-wrap:wrap;gap:.8rem 2rem;align-items:center;justify-content:space-between}
+.vtail a{color:#fff;font-weight:600;font-size:.94rem;text-decoration:none;margin-right:1.4rem;
+  border-bottom:1px solid rgba(255,255,255,.35);padding-bottom:.1rem}
+.vtail a:last-child{margin-right:0}
+.vtail a:hover{border-bottom-color:#fff}
+.vmail{font-size:.86rem;color:rgba(255,255,255,.58)}
+
+/* Light variant. The block is written for a dark ground, which is right at the
+   BOTTOM of contact.html — but on visit.html it sits directly under a green
+   photo hero, and two greens stacked read as a clash rather than a rhythm.
+   Same structure, same rules, park ink instead of white. */
+.vlight .vfacts > div{border-top-color:var(--rule)}
+.vlight .vfacts > div:last-child{border-bottom-color:var(--rule)}
+.vlight .vfacts dt{color:var(--gold)}
+.vlight .vfacts dd{color:var(--ink)}
+.vlight .vfacts dd span{color:var(--ink-soft)}
+.vlight .vfacts dd a{color:var(--green);border-bottom-color:rgba(45,106,53,.4)}
+.vlight .vfacts dd a:hover{border-bottom-color:var(--green)}
+.vlight .vmap{box-shadow:0 4px 18px rgba(40,50,30,.14)}
+
+/* A quiet practical line under the visit block — parking, paths, access, dogs.
+   Was a whole "Getting here" section with two boxed cards, for content that had
+   moved into the block above it. Randy: "Seems like wasted real estate." */
+.vnote{margin:1.6rem 0 0;max-width:62ch;font-size:var(--t-base);line-height:1.7;color:var(--ink-soft)}
+
+/* ── Director's note ─────────────────────────────────────────────────────
+   An announcement flagged director_note, rendered as a magazine editor's
+   welcome rather than a strip: her voice, her name, optionally her face.
+   Sits after the events on the home page — you see what's on, then she tells
+   you what she's pleased about. Absent entirely when she hasn't written one.
+   ─────────────────────────────────────────────────────────────────────── */
+.dnote{
+  /* NO CARD. A border and a white fill were chrome doing a job the content
+     already does — the gold rule, the serif and the portrait say "a person
+     wrote this" on their own. Removing the box let the note sit in the page
+     like a passage pulled aside, which is what an editor's letter is.
+     (White-on-wash was also the only workable fill: sand on wash is a 4-point
+     change, i.e. the invisible-transition trap from elsewhere on this site.) */
+  margin: var(--s7) auto 0;
+  max-width: 44rem;
+  border-left: 3px solid var(--gold-mark);
+  padding: .3rem 0 .3rem 1.9rem;
+}
+@media (max-width: 640px){ .dnote{ padding-left: 1.2rem; } }
+.dnote-lab{
+  font-size: var(--t-cap); font-weight: 800; letter-spacing: .11em;
+  text-transform: uppercase; color: var(--green);
+}
+.dnote-title{ margin: .35rem 0 0; font-size: 1.5rem; line-height: 1.25; color: var(--green-ink); }
+/* The serif is the whole trick. Every other word in this section is the sans;
+   setting her note in Playfair says "a person wrote this" before anyone reads
+   the byline — the oldest move in an editor's letter, and the quietest. */
+.dnote-body{
+  margin: .7rem 0 0; font-family: var(--serif); font-size: 1.14rem;
+  line-height: 1.7; color: var(--ink);
+}
+.dnote-sign{ display: flex; align-items: center; gap: .9rem; margin-top: 1.4rem; }
+.dnote-face{
+  /* 46px was too small to read as a face. At 64 a headshot is recognisable and
+     anything else is obviously wrong, which is the useful failure. */
+  width: 64px; height: 64px; border-radius: 50%; object-fit: cover;
+  flex: 0 0 auto; border: 2px solid var(--gold-mark);
+}
+.dnote-by{ font-size: var(--t-base); font-style: italic; color: var(--ink-soft); }
+.dnote-more{ margin: 1.1rem 0 0; }
+.dnote-link{ font-size: var(--t-base); font-weight: 700; color: var(--green); }

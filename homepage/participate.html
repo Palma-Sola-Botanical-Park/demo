@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3. A place to join in · Palma Sola Botanical Park · Bradenton, Florida</title>
+<meta name="description" content="A subtropical garden on Palma Sola Bay in Bradenton, Florida. Free every day, 8am to dusk, run by the community that loves it.">
+<link rel="icon" type="image/png" href="assets/images/favicon.png">
+<link rel="apple-touch-icon" href="assets/images/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>
+section[id]{scroll-margin-top:78px}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   index.html — rebuilt 2026-09-05 from a standalone concept page, since deleted.
+
+   The order answers a visitor's first five minutes, not a site map:
+     what is this place → what's on → what's here + how to come →
+     what's interesting today → how to take part → who's behind it → come
+
+   REMOVED in this rebuild, deliberately:
+     · the "Seen lately" iNaturalist mosaic and its stats block — the page was
+       becoming a nature-data site rather than a park's front door
+     · the "Every acre. Yours to use." essay — cut to three sentences
+     · "Your phone is a scientific instrument" as a headline — iNaturalist is
+       now framed as participation, near the bottom
+   All of that still exists on its own pages. Git has the old homepage.
+
+   Kept: the hero slideshow, because the community-photo credit chain is the
+   thing the park is proudest of and it belongs above the fold.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* hero slideshow, carried over from the previous homepage */
+.hero-slideshow{position:absolute;inset:0}
+.hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;
+  opacity:0;transition:opacity 1.6s ease}
+.hero-slide.on{opacity:1}
+.hero-photo-note{position:absolute;top:0;left:0;right:0;z-index:3;
+  padding:var(--s4) var(--s4) var(--s7);
+  background:linear-gradient(rgba(8,18,9,.62),rgba(8,18,9,.22) 60%,transparent);
+  color:rgba(255,255,255,.9);font-size:var(--t-xs);line-height:1.5;pointer-events:none}
+.hero-photo-note strong{display:block;color:#fff;font-size:var(--t-sm);margin-bottom:.2rem}
+
+.cx-note{background:#5d4a8a;color:#fff;padding:.7rem 1.5rem;font-size:var(--t-base);text-align:center;line-height:1.5}
+.cx-note a{color:#fff;text-decoration:underline}
+
+/* ── hero ─────────────────────────────────────────────────────────────── */
+.cx-hero{display:grid;grid-template-columns:1fr;background:var(--paper)}
+@media(min-width:900px){.cx-hero{grid-template-columns:1.05fr 1fr}}
+.cx-hero-txt{padding:3.5rem 1.75rem 3rem;max-width:640px;margin-left:auto}
+.cx-eyebrow{font-size:var(--t-cap);font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--green)}
+/* Sized so the first sentence breaks as "There’s always / more to discover."
+   and the italic line never wraps — down to a 360px phone (8.2em of italic at
+   2.3rem is 302px). `balance` keeps desktop from breaking greedily after "more". */
+.cx-h1{font-family:var(--serif);font-size:clamp(2.3rem,5vw,3.4rem);line-height:1.06;text-wrap:balance;color:var(--green-ink);margin:.5rem 0 0}
+.cx-h1 em{display:block;font-style:italic;color:var(--gold)}
+.cx-lede{font-size:1.2rem;line-height:1.6;color:var(--ink);margin:1.1rem 0 0;max-width:34em}
+.cx-hero-img{min-height:340px;background:center/cover no-repeat}
+/* Parenthetical, not a warning. It used to be a gold pill directly under the
+   eyebrow, which gave one closed afternoon the weight of a site-wide alert. */
+.cx-closenote{margin:.8rem 0 0;font-size:var(--t-base);color:var(--ink-soft)}
+.cx-closenote::before{content:"🔒";margin-right:.4rem;opacity:.65}
+
+/* three ways in */
+.cx-ways{display:grid;gap:.9rem;margin:1.9rem 0 0;grid-template-columns:1fr}
+@media(min-width:560px){.cx-ways{grid-template-columns:repeat(3,1fr)}}
+.cx-way{display:block;background:var(--surface);border:1px solid var(--rule);border-top:3px solid var(--green);
+  border-radius:var(--r);padding:.95rem 1rem;text-decoration:none}
+.cx-way:hover{border-top-color:var(--gold-mark)}
+.cx-way b{display:block;font-family:var(--serif);font-size:1.14rem;color:var(--green-ink);margin-bottom:.2rem}
+.cx-way span{font-size:var(--t-base);color:var(--ink-soft);line-height:1.45}
+
+/* ── shared section furniture ─────────────────────────────────────────── */
+.cx-sec{padding:3.4rem 1.5rem}
+.cx-in{max-width:1160px;margin:0 auto}
+.cx-title{font-family:var(--serif);font-size:2rem;color:var(--green-ink);margin:.15rem 0 .3rem;line-height:1.15}
+.cx-sub{font-size:var(--t-base);color:var(--ink-soft);margin:0 0 1.6rem;line-height:1.6;max-width:56em}
+.cx-more{display:inline-block;margin-top:1.8rem;font-size:var(--t-base);font-weight:700;color:var(--green)}
+
+/* ── what's happening ─────────────────────────────────────────────────── */
+.cx-bill{display:grid;gap:1.4rem;grid-template-columns:1fr}
+@media(min-width:820px){.cx-bill{grid-template-columns:repeat(3,1fr)}}
+.cx-post{background:var(--surface);border:1px solid var(--rule);border-top:4px solid var(--gold-mark);
+  border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
+.cx-post-art{aspect-ratio:5/7;background:var(--sunk);overflow:hidden}
+.cx-post-art img{width:100%;height:100%;object-fit:contain;display:block}
+.cx-post-b{padding:.9rem 1.05rem 1.1rem;display:flex;flex-direction:column;flex:1}
+.cx-when{font-size:.95rem;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:var(--gold)}
+.cx-post h3{margin:.25rem 0 0;font-size:1.28rem;line-height:1.25;color:var(--green-ink)}
+.cx-post p{margin:.5rem 0 0;font-size:var(--t-base);line-height:1.55;color:var(--ink-soft)}
+.cx-post a.go{margin-top:auto;padding-top:.8rem;font-size:var(--t-base);font-weight:700;color:var(--green)}
+
+.cx-next{margin-top:2rem;background:var(--surface);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden}
+.cx-row{display:flex;gap:1rem;align-items:baseline;padding:1.05rem 1.2rem;border-bottom:1px solid var(--rule)}
+.cx-row:last-child{border-bottom:0}
+.cx-row .d{flex:0 0 8.5rem;font-size:var(--t-base);font-weight:800;color:var(--green)}
+.cx-row .t{font-size:var(--t-base);color:var(--ink)}
+.cx-row .t b{color:var(--green-ink)}
+.cx-row.closed{background:var(--sunk)}
+/* The standing classes. One entry per sheet row, in a compact grid so each is
+   delineated instead of running into the next — five items, two or three
+   columns, rather than five sparse dated rows. */
+.cx-weekly{padding:1.3rem 1.2rem;background:var(--sunk);border-top:1px solid var(--rule)}
+.cx-weeklab{display:block;font-size:var(--t-cap);font-weight:800;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--green);margin-bottom:.9rem}
+.cx-wkgrid{display:grid;gap:.75rem 2.2rem;grid-template-columns:1fr}
+@media(min-width:560px){.cx-wkgrid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:980px){.cx-wkgrid{grid-template-columns:repeat(3,1fr)}}
+.cx-wk{display:flex;gap:.7rem;align-items:baseline;font-size:var(--t-base);line-height:1.55;
+  padding:.35rem 0;border-bottom:1px solid var(--rule)}
+.cx-wkwhen{flex:0 0 5.6rem;font-weight:800;color:var(--green);white-space:nowrap}
+.cx-wkwhat{color:var(--ink)}
+/* Series attribution on a dated row — present, not shouting. */
+.cx-ser{color:var(--ink-soft)}
+.cx-row.closed .d,.cx-row.closed .t{color:var(--ink-soft)}
+
+/* ── what's here ──────────────────────────────────────────────────────── */
+.cx-tiles{display:grid;gap:1.1rem;grid-template-columns:1fr}
+@media(min-width:640px){.cx-tiles{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:980px){.cx-tiles{grid-template-columns:repeat(3,1fr)}}
+.cx-tile{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r);padding:1.15rem 1.25rem}
+.cx-tile b{display:block;font-family:var(--serif);font-size:1.22rem;color:var(--green-ink);margin-bottom:.35rem}
+.cx-tile span{font-size:var(--t-base);line-height:1.6;color:var(--ink-soft)}
+
+/* ── plan your visit ──────────────────────────────────────────────────── */
+.cx-plan{display:grid;gap:2rem;grid-template-columns:1fr;align-items:start}
+/* On a phone the map used to sit below the facts, the paragraph and a link —
+   so the one thing that actually orients you was last. It now leads, and the
+   desktop composition is unchanged (text left, map right) via explicit
+   column placement rather than source order. */
+.cx-plan > .cx-map{order:-1}
+@media(min-width:880px){
+  .cx-plan{grid-template-columns:1fr 1fr}
+  .cx-plan > *{order:0}
+  /* Pull the map up level with "Before you come" rather than with the first
+     fact. The heading only spans the left column, so a top-aligned map started
+     roughly 5rem lower than the section did and read as sunk. */
+  .cx-plan > .cx-map{grid-column:2;grid-row:1;margin-top:-4.9rem}
+}
+.cx-facts{display:grid;gap:1rem;grid-template-columns:repeat(2,1fr);margin-bottom:1.4rem}
+.cx-fact b{display:block;font-family:var(--serif);font-size:1.5rem;color:var(--green-ink);line-height:1.1}
+.cx-fact span{font-size:var(--t-base);color:var(--ink-soft)}
+.cx-map{border:1px solid var(--rule);border-radius:var(--r);overflow:hidden;background:var(--surface)}
+.cx-map img{width:100%;display:block}
+.cx-maplab{padding:.7rem .9rem;font-size:var(--t-base);color:var(--ink-soft);border-top:1px solid var(--rule)}
+
+/* ── right now ────────────────────────────────────────────────────────── */
+.cx-rn{display:grid;gap:1.1rem;grid-template-columns:1fr}
+@media(min-width:700px){.cx-rn{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.cx-rn{grid-template-columns:repeat(4,1fr)}}
+.cx-rncard{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r);overflow:hidden}
+.cx-rnart{height:150px;background:var(--sunk);position:relative}
+.cx-chip{position:absolute;top:.6rem;left:.6rem;font-size:.72rem;font-weight:800;letter-spacing:.05em;
+  text-transform:uppercase;padding:.24rem .62rem;border-radius:20px;box-shadow:0 1px 5px rgba(0,0,0,.25)}
+.cx-rnb{padding:.85rem 1rem 1rem}
+.cx-rnb b{display:block;font-size:1.05rem;color:var(--green-ink)}
+.cx-rnb i{display:block;font-size:var(--t-base);color:var(--ink-soft);font-style:italic;margin-top:.1rem}
+.cx-rnb span{display:block;font-size:var(--t-base);color:var(--green);font-weight:600;margin-top:.5rem}
+
+/* ── collection / participate ─────────────────────────────────────────── */
+.cx-stats{display:flex;flex-wrap:wrap;gap:2.4rem;margin:.4rem 0 1.4rem}
+.cx-stat b{display:block;font-family:var(--serif);font-size:2.4rem;color:var(--green-ink);line-height:1}
+.cx-stat span{font-size:var(--t-base);color:var(--ink-soft)}
+
+/* ── be part of it ────────────────────────────────────────────────────── */
+.cx-ways2{display:grid;gap:1rem;grid-template-columns:1fr}
+@media(min-width:640px){.cx-ways2{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.cx-ways2{grid-template-columns:repeat(5,1fr)}}
+.cx-w2{display:block;text-decoration:none;background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.16);border-radius:var(--r);padding:1rem 1.1rem;
+  transition:background .15s,border-color .15s}
+.cx-w2:hover{background:rgba(255,255,255,.13);border-color:var(--gold-light)}
+.cx-w2 b{display:block;font-family:var(--serif);font-size:1.16rem;color:#fff;margin-bottom:.25rem}
+.cx-w2 span{font-size:var(--t-base);line-height:1.5;color:rgba(255,255,255,.8)}
+
+/* ── closing ──────────────────────────────────────────────────────────── */
+.cx-close{position:relative;min-height:440px;display:flex;align-items:center;justify-content:center;
+  text-align:center;background:center/cover no-repeat;color:#fff;padding:3rem 1.5rem}
+.cx-close::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,26,14,.35),rgba(12,26,14,.78))}
+.cx-close > div{position:relative;z-index:2;max-width:40em}
+.cx-close h2{font-family:var(--serif);font-size:clamp(2.2rem,5vw,3rem);color:#fff;line-height:1.1;margin:0 0 .8rem}
+.cx-close p{font-size:1.15rem;line-height:1.7;color:rgba(255,255,255,.9);margin:0 0 .4rem}
+/* Numbers set in the serif, slightly larger and in gold, so they carry inside
+   a sentence without the sentence turning into a scoreboard. */
+.cx-tally{margin:1.2rem 0 .9rem !important;font-size:1.22rem;line-height:1.75}
+.cx-keepgoing{margin-top:1.6rem !important;font-size:1.32rem}
+.cx-keepgoing a{color:var(--gold-light);font-weight:700;
+  border-bottom:2px solid rgba(234,188,90,.55);padding-bottom:.1rem;text-decoration:none}
+.cx-keepgoing a:hover{border-bottom-color:var(--gold-light);text-decoration:none}
+.cx-close p b{font-family:var(--serif);font-size:1.32em;color:var(--gold-light);font-weight:700}
+/* The credit plate here sits beneath a paragraph of copy rather than over a
+   bare photograph, so it is dialled back — the full-strength version competes
+   with the text it is under. */
+/* Selector is .cx-close > .photo-attr--muted (0,2,0) on purpose: the sibling
+   rule `.cx-close > div` is 0,1,1 and beat a bare .photo-attr--muted, forcing
+   position:relative back on and turning the credit into a flex item squeezed
+   into a narrow column over the copy. Two classes outrank one class + a type. */
+.cx-close > .photo-attr--muted{
+  /* .cx-close is text-align:center and that cascades in. The credit LINE is a
+     flex row so it ignores it, but the species line is plain text and centred
+     itself inside the plate — which read as a random indent above a
+     left-aligned line. A credit plate is always left-aligned. */
+  text-align:left;
+  position:absolute; left:1rem; right:1rem; bottom:.9rem; z-index:3;
+  opacity:.72; max-width:32rem;
+  transform:scale(.92); transform-origin:left bottom;
+}
+.cx-close > .photo-attr--muted .attr-by{color:rgba(234,188,90,.85)}
+/* STAYS ABSOLUTE AT EVERY WIDTH. It was switched to position:static on phones,
+   which made it a flex item inside .cx-close — a centring flex container — so
+   it collapsed into a narrow column stacked on top of the copy. The section
+   reserves room for it below instead. */
+@media(max-width:640px){
+  .cx-close > .photo-attr--muted{transform:scale(.86);opacity:.8;left:.9rem;right:.9rem;bottom:.7rem}
+  .cx-close{padding-bottom:6rem}
+}
+</style>
+<meta name="robots" content="noindex,nofollow"><link rel="stylesheet" href="review.css"></head>
+<body class="review participate"><div class="review-bar"><a href="../index.html">← Comparison guide</a><nav aria-label="Compare homepages"><a href="current.html">Current structure</a><a href="balance.html">1. Better balance</a><a href="discover.html">2. Discoveries &amp; people</a><a href="participate.html" aria-current="page">3. A place to join in</a></nav></div><details class="primer" open><summary>For Bev · 3. A place to join in — what to look for</summary><div class="primer-inner"><h2>Make the different ways in unmistakable</h2><ul><li>Visiting, attending, volunteering, sharing, supporting and hosting are introduced near the top.</li><li>Events and the ordinary week follow as concrete opportunities.</li><li>The discovery stories show what people are already contributing.</li></ul><p><strong>The tradeoff:</strong> This asks visitors to consider participating sooner. Does it feel welcoming, or like asking before they are ready?</p><p class="snapshot">September 30 content snapshot. Same park material throughout. Observation totals use the current homepage’s printed fallback figures; the photo total is from the local registry. No live counts or analytics. Site links open explore in a new tab. Collapse this note to judge the page.</p></div></details>
+<style>
+  /* Top-nav spacing + hover dropdowns (desktop only; mobile uses the grouped list) */
+  @media (min-width:861px){
+    #site-nav .nav-links{display:flex;align-items:stretch;gap:2.6rem;height:64px}
+    #site-nav .nav-links > li{display:flex;align-items:center;margin:0;padding:0}
+    #site-nav .nav-links > li.has-sub{position:relative}
+    #site-nav .subnav{
+      position:absolute;top:100%;left:0;min-width:192px;margin:0;padding:.4rem 0;
+      list-style:none;background:var(--green-deep);
+      border-top:2px solid var(--gold);border-radius:0 0 10px 10px;
+      box-shadow:0 16px 32px rgba(0,0,0,.32);
+      opacity:0;visibility:hidden;pointer-events:none;
+      transform:translateY(-6px);transition:opacity .15s ease,transform .15s ease;z-index:950;
+    }
+    #site-nav .nav-links > li.has-sub:last-child .subnav{left:auto;right:0}
+    #site-nav .nav-links > li.has-sub:hover > .subnav,
+    #site-nav .nav-links > li.has-sub:focus-within > .subnav{
+      opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0);
+    }
+    #site-nav .subnav li{display:block;margin:0}
+    #site-nav .subnav a{
+      display:block;padding:.5rem 1.15rem;white-space:nowrap;border-bottom:0;
+      font-size:.95rem;font-weight:600;letter-spacing:.02em;color:rgba(255,255,255,.82);
+    }
+    #site-nav .subnav a:hover,#site-nav .subnav a:focus{background:rgba(255,255,255,.10);color:var(--white)}
+  }
+  @media (min-width:861px) and (max-width:1100px){#site-nav .nav-links{gap:1.7rem}}
+  /* Mobile: grouped sub-items under each top link inside the hamburger panel.
+
+     The panel paints its own background here, exactly as the desktop .subnav
+     above does, instead of inheriting one from the stylesheet. It used not to,
+     and that is what broke it: these link colours were white — chosen to match
+     the dark-green desktop dropdowns — while the panel background came from
+     psbp.css, which is white. White on white. Every entry was still in the page
+     and still tappable; none of the sub-entries could be seen.
+
+     Keeping background and text together in one block means the menu renders
+     correctly whether a page loads psbp.css or the older site.css, and cannot
+     be broken again by a change to either. Every var() below carries a literal
+     fallback for the same reason. */
+  #navMobile{background:#fff}
+  #navMobile .nm-top{
+    font-weight:700;color:var(--green-deep,#1a3a1f);
+    border-top:1px solid var(--border,#e6e2d6);margin-top:.35rem;
+  }
+  #navMobile .nm-top:first-child{border-top:0;margin-top:0}
+  #navMobile .nm-sub{padding-left:2.4rem;font-size:.95rem;font-weight:500;color:var(--text-soft,#5c5f56)}
+  #navMobile .nm-sub:hover,#navMobile .nm-sub:focus{color:var(--green-deep,#1a3a1f)}
+  /* Make the open mobile menu fit the screen and scroll inside itself —
+     otherwise the list overflows past the viewport and can't be reached,
+     and touch-scroll leaks through to the page behind it. */
+  #navMobile{max-height:calc(100vh - 64px);max-height:calc(100dvh - 64px);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+</style>
+<nav id="site-nav">
+  <ul class="nav-links">
+    <li class="has-sub">
+      <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/index.html">Home</a>
+      <ul class="subnav">
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/index.html">Welcome</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/index.html#happening">What's On</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/index.html#whatsHere">What's Here</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/index.html#rightNowSection">Right Now</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/news.html">News</a></li>
+      </ul>
+    </li>
+    <li class="has-sub">
+      <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/visit.html">Visit</a>
+      <ul class="subnav">
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/visit.html#getting-here">Getting here</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/visit.html#the-layout">Park Map</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/visit.html#wander">Where to wander</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/visit.html#tours">Tours</a></li>
+      </ul>
+    </li>
+    <li class="has-sub">
+      <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/events.html">Events</a>
+      <ul class="subnav">
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/events.html#weeks">Next 2 Weeks</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/events.html#calendar">Full Schedule</a></li>
+      </ul>
+    </li>
+    <li class="has-sub">
+      <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/venue.html">Venue</a>
+      <ul class="subnav">
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/venue.html#weddings">Weddings</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/venue.html#rentals">Other Events</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/venue.html#layout">Park Map</a></li>
+      </ul>
+    </li>
+    <li class="has-sub">
+      <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/get-involved.html">Get Involved</a>
+      <ul class="subnav">
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/get-involved.html#donate">Donate</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/get-involved.html#member">Membership</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/get-involved.html#volunteer">Volunteering</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/get-involved.html#citizen-science">Citizen Science</a></li>
+      </ul>
+    </li>
+    <li class="has-sub">
+      <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/contact.html">About</a>
+      <ul class="subnav">
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/contact.html#story">Our Story</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/contact.html#organization">Our People</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/contact.html#mission">Our Mission</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/contact.html#community-links">Our Partners</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/contact.html#visit">Contact Us</a></li>
+      </ul>
+    </li>
+  </ul>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/index.html" class="nav-logo">
+    <img src="assets/images/white_PSBP_logo.png" alt="Palma Sola Botanical Park">
+  </a>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-mobile" id="navMobile">
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/index.html" class="nm-top">Home</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/index.html" class="nm-sub">Welcome</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/index.html#happening" class="nm-sub">What's On</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/index.html#whatsHere" class="nm-sub">What's Here</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/index.html#rightNowSection" class="nm-sub">Right Now</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/news.html" class="nm-sub">News</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/visit.html" class="nm-top">Visit</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/visit.html#getting-here" class="nm-sub">Getting here</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/visit.html#the-layout" class="nm-sub">Park Map</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/visit.html#wander" class="nm-sub">Where to wander</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/visit.html#tours" class="nm-sub">Tours</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/events.html" class="nm-top">Events</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/events.html#weeks" class="nm-sub">Next 2 Weeks</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/events.html#calendar" class="nm-sub">Full Schedule</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/venue.html" class="nm-top">Venue</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/venue.html#weddings" class="nm-sub">Weddings</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/venue.html#rentals" class="nm-sub">Other Events</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/venue.html#layout" class="nm-sub">Park Map</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/get-involved.html" class="nm-top">Get Involved</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/get-involved.html#donate" class="nm-sub">Donate</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/get-involved.html#member" class="nm-sub">Membership</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/get-involved.html#volunteer" class="nm-sub">Volunteering</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/get-involved.html#citizen-science" class="nm-sub">Citizen Science</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/contact.html" class="nm-top">About</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/contact.html#story" class="nm-sub">Our Story</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/contact.html#organization" class="nm-sub">Our People</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/contact.html#mission" class="nm-sub">Our Mission</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/contact.html#community-links" class="nm-sub">Our Partners</a>
+  <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/contact.html#visit" class="nm-sub">Contact Us</a>
+</div><div class="cx-hero">
+  <div class="cx-hero-txt">
+    <div class="cx-eyebrow">Bradenton, Florida · Free · 8am–dusk daily</div>
+    <h1 class="cx-h1">There’s always more to discover.<em>Come be part of it.</em></h1>
+    <p class="cx-lede">
+      Explore the gardens, look for wildlife, take a photo or follow a sign. What we learn
+      and share together helps tell the story of this place.
+    </p>
+
+    
+    <p class="cx-closenote" id="homeClosure" style="display:none"></p>
+
+    
+    <div class="cx-ways">
+      <a class="cx-way" target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/visit.html"><b>Visit the park</b><span>Hours, directions, the map, what you'll find</span></a>
+      <a class="cx-way" target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/events.html"><b>What's happening</b><span>Events, classes, music, workdays</span></a>
+      <a class="cx-way" target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/nature.html"><b>Explore</b><span>Plants, birds, wildlife, the collection</span></a>
+    </div>
+  </div>
+  <div class="cx-hero-img" style="position:relative;overflow:hidden">
+    <div class="hero-photo-note">
+      <strong>Every nature photo here was taken by our community.</strong>
+      Students, volunteers, visitors and experienced photographers.
+    </div>
+    <div class="hero-slideshow" id="heroSlides"><div class="hero-slide on" style="background-image:url('assets/photos/PSBP-00005/662740624.jpg');background-position:50% 50%"><div class="photo-attr"><span class="attr-species">Queen&#x27;s Crepe Myrtle</span><span class="attr-line">Franky McArthur · CC-BY-NC · iNaturalist</span></div></div><div class="hero-slide " style="background-image:url('assets/photos/PSBP-00056/731638176.jpg');background-position:50% 51%"><div class="photo-attr"><span class="attr-species">Heliconia</span><span class="attr-line">Alaina C. – High School Volunteer · CC-BY-NC · iNaturalist</span></div></div><div class="hero-slide " style="background-image:url('assets/photos/PSBP-99978/733901077.jpg');background-position:62% 40%"><div class="photo-attr"><span class="attr-species">Northern Cardinal</span><span class="attr-line">Helen Lewis · CC-BY-NC · iNaturalist</span></div></div></div><button class="photo-pause" id="pausePhotos" type="button" aria-pressed="false">Pause photos</button>
+  </div>
+</div>
+
+<section class="cx-sec bg-deep">
+  <div class="cx-in">
+    <span class="label">Ways to join in</span>
+    <h2 class="cx-title" style="color:#fff">Be part of the park</h2>
+    <p class="join-intro">There is more than one way to be part of this place. Start with what interests you.</p><div class="cx-ways2">
+      <a class="cx-w2" target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/visit.html"><b>Walk the park</b><span>Ten acres, open every day. No charge, no booking.</span></a>
+      <a class="cx-w2" target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/events.html"><b>Attend</b><span>A class, live music, an art show.</span></a>
+      <a class="cx-w2" target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/get-involved.html#volunteer"><b>Volunteer</b><span>Gardening, the nursery, events, the office.</span></a>
+      <a class="cx-w2" target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/get-started.html"><b>Share what you see</b><span>Add observations through iNaturalist.</span></a>
+      <a class="cx-w2" target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/get-involved.html#donate"><b>Support</b><span>Membership and donations keep it free.</span></a>
+    <a class="cx-w2" target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/venue.html"><b>Host a gathering</b><span>Bring people together for a celebration, meeting or event in the garden.</span></a></div>
+  </div>
+</section>
+
+<section class="cx-sec bg-wash" id="happening">
+  <div class="cx-in">
+    <span class="label">What's on</span>
+    <h2 class="cx-title">Coming up at the park</h2>
+    <p class="cx-sub">Three big days this season — and something most weeks in between.</p>
+
+    <div class="cx-bill" id="homePosters"><article class="feat-card"><a class="feat-art" href="https://palma-sola-botanical-park.github.io/explore/images/events/fallplant.jpg" target="_blank" rel="noopener" aria-label="View Fall Plant &amp; Garden Festival flyer"><img class="feat-art-fg" src="assets/images/events/fallplant.jpg" alt="Fall Plant &amp; Garden Festival flyer"></a><div class="feat-body"><div class="feat-when">Oct 4 · 10AM - 3PM</div><h3 class="feat-title">Fall Plant &amp; Garden Festival</h3><p class="feat-desc">Huge variety of plants for sale. Artisans, music, food, and fun!</p><div class="feat-actions"><a class="feat-link" href="https://palma-sola-botanical-park.github.io/explore/events.html" target="_blank" rel="noopener">Event details →</a></div></div></article><article class="feat-card"><a class="feat-art" href="https://palma-sola-botanical-park.github.io/explore/images/events/groovin-2026.jpg" target="_blank" rel="noopener" aria-label="View Groovin&#x27; in the Gardens flyer"><img class="feat-art-fg" src="assets/images/events/groovin-2026.jpg" alt="Groovin&#x27; in the Gardens flyer"></a><div class="feat-body"><div class="feat-when">Oct 18 · 4PM - 6PM</div><h3 class="feat-title">Groovin&#x27; in the Gardens</h3><p class="feat-desc">An afternoon of live jazz in the gardens with The Pops Orchestra Jazz Combo. Wine, beer, soda and food available for purchase. Tickets still available</p><div class="feat-actions"><a class="feat-link" href="https://thepopsorchestra.app.getcuebox.com/o/21NL0B8D/shows/QLF5LXY1" target="_blank" rel="noopener">Tickets · From $30 · early bird →</a><a class="feat-link" href="https://palma-sola-botanical-park.github.io/explore/events.html" target="_blank" rel="noopener">Event details →</a></div></div></article><article class="feat-card"><a class="feat-art" href="https://palma-sola-botanical-park.github.io/explore/images/events/winternights.jpg" target="_blank" rel="noopener" aria-label="View Winter Nights under the Lights flyer"><img class="feat-art-fg" src="assets/images/events/winternights.jpg" alt="Winter Nights under the Lights flyer"></a><div class="feat-body"><div class="feat-when">Dec 17–20 · 6PM - 9:30PM</div><h3 class="feat-title">Winter Nights under the Lights</h3><p class="feat-desc">Acres of Lights, Santa &amp; Mrs. Claus, Food Trucks, Gift Market, Hot Cider, Live Music, Decorated Trees, Crafts, Toys for Tots &amp; More</p><div class="feat-actions"><a class="feat-link" href="https://palma-sola-botanical-park.github.io/explore/events.html" target="_blank" rel="noopener">Event details →</a></div></div></article></div>
+
+    
+    <h3 style="font-family:var(--serif);font-size:1.3rem;color:var(--green-ink);margin:3.4rem 0 .2rem">Also happening</h3>
+    <div class="cx-next" id="homeUpcoming" style="margin-top:.7rem"><div class="cx-row"><span class="d">Oct 4</span><span class="t">9AM - 10AM · <b>Volunteer Orientation</b></span></div><div class="cx-weekly"><span class="cx-weeklab">Every week</span><div class="cx-wkgrid"><div class="cx-wk"><span class="cx-wkwhen">Mon 4PM</span><span class="cx-wkwhat">Basic Hatha Yoga</span></div><div class="cx-wk"><span class="cx-wkwhen">Tue 6PM</span><span class="cx-wkwhat">Yoga-Pilates-Weights</span></div><div class="cx-wk"><span class="cx-wkwhen">Wed 9AM</span><span class="cx-wkwhat">Basic Hatha Yoga</span></div><div class="cx-wk"><span class="cx-wkwhen">Wed 3PM</span><span class="cx-wkwhat">Bright Futures High School Volunteer Program</span></div></div></div></div>
+    <a class="cx-more" target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/events.html">See the full calendar →</a>
+
+    
+    <div id="dnoteWrap"><div class="dnote"><div class="dnote-lab">From the Director · September 2026</div><h3 class="dnote-title">A little change is good</h3><p class="dnote-body">You may notice things are changing a bit around here. Take a look around. We are trying to focus on our core mission of appreciating nature: signs on the plants, displays in our air conditioned spaces, interesting facts about all the species here. More to come, so stay tuned!</p><div class="dnote-sign"><img class="dnote-face" src="assets/images/staff/director.jpg" alt=""><span class="dnote-by">— Beverly Zoller Burdette, Executive Director</span></div></div></div>
+  </div>
+</section>
+
+<section class="cx-sec bg-sunk" id="rightNowSection">
+  <div class="cx-in">
+    <span class="label">This week</span>
+    <h2 class="cx-title">Right now in the park</h2>
+    
+    <p class="cx-sub">What's blooming, what's fruiting, what's flying — and what somebody
+      just planted. Open any card for a few things worth knowing about it.</p>
+    <div class="review-stories" id="rightNowStrip"><article class="review-story"><div class="story-photo"><img loading="lazy" src="assets/photos/PSBP-00059/723780663.jpg" alt="Beautyberry" style="object-position:51% 47%"><span>In bloom</span></div><div class="story-copy"><h3>Beautyberry</h3><i>Callicarpa americana</i><p>This is the best time of year to see Beautyberry in its full purple. Like a Dr Seuss plant!</p><p class="story-location">Near Office and around Cypress Pond</p><div class="story-credit">Jacob F. – High School Volunteer · CC-BY-NC · iNaturalist</div><details><summary>A few things worth knowing</summary><p>Around the beginning of September, tight clusters of vivid purple fruit appear directly around the stems. At Palma Sola, that is when Beautyberry suddenly seems to be everywhere.</p><p>American Beautyberry is a Florida native. Ours grow around Cypress Pond and the office, and some appear to have seeded themselves into new spots.</p><p>The fruit is edible, though fresh Beautyberries are tart and not especially flavorful; they are more often made into jelly, with a lot of sugar.</p><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/plants/PSBP-00059-Beautyberry.html">See the species page →</a></details></div></article><article class="review-story"><div class="story-photo"><img loading="lazy" src="assets/photos/PSBP-00056/731638176.jpg" alt="Heliconia" style="object-position:50% 51%"><span>In bloom</span></div><div class="story-copy"><h3>Heliconia</h3><i>Heliconia psittacorum</i><p>Great shot of these blooming by Alaina, one of our high school volunteers! The mass planting outside the office is at times unruly, so we enjoy them now while we can.</p><p class="story-location">Near Office</p><div class="story-credit">Alaina C. – High School Volunteer · CC-BY-NC · iNaturalist</div><details><summary>A few things worth knowing</summary><p>The showy orange bracts are not flowers — they are modified leaves. The actual flowers are the small structures tucked inside them. The bracts last for weeks after the true flowers have finished.</p><p>The curved bract shape is a near-exact match for a hummingbird bill. Plant and bird have been shaping each other through coevolution. In its native range, hummingbirds become territorial over specific heliconia plants, defending them as a private nectar supply.</p><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/plants/PSBP-00056-Heliconia.html">See the species page →</a></details></div></article><article class="review-story"><div class="story-photo"><img loading="lazy" src="assets/photos/PSBP-99978/733901077.jpg" alt="Northern Cardinal" style="object-position:62% 40%"><span>Spotted</span></div><div class="story-copy"><h3>Northern Cardinal</h3><i>Cardinalis cardinalis</i><p>Unexpected Helping Hand. Photographer Helen Lewis spotted something remarkable: a Northern Cardinal feeding a young Northern Mockingbird chick. A wonderful little moment of unexpected care, caught right here at the park.</p><p class="story-location">Rare Fruit</p><div class="story-credit">Helen Lewis · CC-BY-NC · iNaturalist</div><details><summary>A few things worth knowing</summary><p>Males are bright red with a pointed crest and black face mask; females are warm buff-brown with red tinges. Both carry the same stout orange-red bill.</p><p>Both sexes sing. In many North American songbirds only the male does.</p><p>That heavy conical bill is a seed-cracker, opening tough seeds many birds cannot manage.</p><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/wildlife/PSBP-99978-Northern-Cardinal.html">See the species page →</a></details></div></article><article class="review-story"><div class="story-photo"><img loading="lazy" src="assets/photos/PSBP-99936/715214448.jpg" alt="Eastern Lubber" style="object-position:53% 42%"><span>Spotted</span></div><div class="story-copy"><h3>Eastern Lubber</h3><i>Romalea microptera</i><p>Jenny caught this beast as she walked to the Galleria and took this great shot of its coloring. Beautiful and creepy at the same time.</p><p class="story-location">Office Decking</p><div class="story-credit">Jenny Gunter · CC-BY-NC · iNaturalist</div><details><summary>A few things worth knowing</summary><p>One of Florida&#x27;s largest grasshoppers, an adult Eastern Lubber can reach about three inches long.</p><p>The wings are too small for sustained flight. Adults mostly walk and climb, with only short hops when disturbed.</p><p>The black, yellow, orange or red coloration is a warning. Lubbers contain defensive chemicals and can release a foul-smelling froth when threatened.</p><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/wildlife/PSBP-99936-Eastern-Lubber-Grasshopper.html">See the species page →</a></details></div></article><article class="review-story"><div class="story-photo"><img loading="lazy" src="assets/photos/PSBP-00125/681678865.jpg" alt="Golden Shower Tree" style="object-position:50% 50%"><span>In bloom</span></div><div class="story-copy"><h3>Golden Shower Tree</h3><i>Cassia fistula</i><p>To the left of the pavilion, between the butterfly garden and the rare fruit area is this hidden gem. Full glory of yellow right now!</p><p class="story-location">Near Butterfly Garden</p><div class="story-credit">Rob Carr · CC-BY-NC · iNaturalist</div><details><summary>A few things worth knowing</summary><p>Long chains of yellow flowers hang from the branches in late spring and early summer, briefly turning an otherwise inconspicuous tree into something much easier to spot.</p><p>The dark cylindrical pods that follow can reach about two feet long and stay on the tree through the winter.</p><p>Break open a mature pod and it isn&#x27;t one long hollow tube: the seeds sit in a row, separated by partitions, with dark pulp packed around them.</p><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/plants/PSBP-00125-Golden-Shower-Tree.html">See the species page →</a></details></div></article><article class="review-story"><div class="story-photo"><img loading="lazy" src="assets/photos/PSBP-00010/703870944.jpg" alt="Geiger Tree" style="object-position:38% 57%"><span>In bloom</span></div><div class="story-copy"><h3>Geiger Tree</h3><i>Cordia sebestena</i><p>The Geiger Tree can be found in a couple spots. In the middle of the hibiscus garden in the field behind the office. Or in the welcome island. You passed in on the way in.</p><p class="story-location">Welcome Island and Hibiscus Garden</p><div class="story-credit">Rhonda Olschefskie · CC-BY-NC · iNaturalist</div><details><summary>A few things worth knowing</summary><p>Clusters of orange-red flowers can appear again and again through the warm season.</p><p>Rub a leaf and you have the other name for it — sandpaper leaf. Both surfaces are genuinely rough.</p><p>Pale, wrinkled fruits follow the flowers.</p><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/plants/PSBP-00010-Geiger-Tree.html">See the species page →</a></details></div></article><article class="review-story"><div class="story-photo"><img loading="lazy" src="assets/photos/PSBP-00301/727623040.jpg" alt="Rainbow Eucalyptus" style="object-position:50% 45%"><span>Newly planted</span></div><div class="story-copy"><h3>Rainbow Eucalyptus</h3><i>Eucalyptus deglupta</i><p>Our team planted a new tree in September to replace the fallen baobab from the storms of past years. We also lost a rainbow eucalyptus near the cactus garden, so this is a welcome back of sorts!</p><p class="story-location">Front Pond</p><div class="story-credit">Franky McArthur · CC-BY-NC · iNaturalist</div><details><summary>A few things worth knowing</summary><p>The bark is not dyed or treated. Every color on that trunk follows a predictable sequence: the outer bark peels away to reveal bright green inner bark, which then shifts through blue and purple, deepens into orange and red, and finally fades to brown — at which point the cycle starts over. Different patches are always at different stages, which is why the whole trunk reads as a mosaic.</p><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/plants/PSBP-00301-Rainbow-Eucalyptus.html">See the species page →</a></details></div></article></div>
+    <a class="cx-more" target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/nature.html">Browse the collection →</a>
+  </div>
+</section>
+
+<section class="cx-sec bg-paper" id="whatsHere">
+  <div class="cx-in">
+    <span class="label">The place itself</span>
+    <h2 class="cx-title">What's here</h2>
+    <p class="cx-sub">Ten acres, and six places worth walking to.</p>
+
+    <div class="cx-tiles">
+      <div class="cx-tile"><b>Rare Fruit Trail</b><span>A frost-free pocket growing things that shouldn't survive in Manatee County — star fruit, dragon fruit, jackfruit, lychee.</span></div>
+      <div class="cx-tile"><b>Butterfly Garden</b><span>Nectar and host plants chosen to pull butterflies through the season. Best on a warm, still morning.</span></div>
+      <div class="cx-tile"><b>Serenity Garden</b><span>Benches, soft planting and a pond just beyond. The place to slow down mid-walk.</span></div>
+      <div class="cx-tile"><b>Rare Palms &amp; Plumeria</b><span>Specimen palms you won't find in a typical yard, and plumeria that perfume the path in summer.</span></div>
+      <div class="cx-tile"><b>Art in the Park</b><span>The indoor gallery at the Galleria — rotating shows from local artists, and a cool place to pause.</span></div>
+      <div class="cx-tile"><b>Hidden Garden Nursery</b><span>Volunteer-run, near the back gate. Plants propagated from the collection. Oct–May, Tue &amp; Sat, 9am–noon.</span></div>
+    </div>
+
+    <hr style="border:0;border-top:1px solid var(--rule);margin:2.6rem 0 2.2rem">
+
+    <span class="label">Before you come</span>
+    <h2 class="cx-title" style="font-size:1.7rem">Plan your visit</h2>
+    <div class="cx-plan" style="margin-top:1.2rem">
+      <div>
+        <div class="cx-facts">
+          <div class="cx-fact"><b>Free</b><span>No admission charge</span></div>
+          <div class="cx-fact"><b>8am–dusk</b><span>Every day of the year</span></div>
+          <div class="cx-fact"><b>9800 17th Ave NW</b><span>Bradenton, Florida</span></div>
+          <div class="cx-fact"><b>(941) 761-2866</b><span>Office hours vary</span></div>
+        </div>
+        <p class="cx-sub" style="margin-bottom:.8rem">
+          You don't need a reservation, a tour or any botanical knowledge. Walk the paths at
+          your own pace. The park closes occasionally for private events — worth checking the
+          calendar before a weekend visit.
+        </p>
+        <a class="cx-more" target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/visit.html">Directions, accessibility and more about each place →</a>
+      </div>
+      <div class="cx-map">
+        <img src="assets/images/ParkMap.png" alt="Map of Palma Sola Botanical Park">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cx-sec bg-sunk">
+  <div class="cx-in" style="max-width:720px;text-align:center">
+    <h2 class="cx-title">A park built by its community</h2>
+    <p class="cx-sub" style="margin:0 auto">
+      Palma Sola Botanical Park exists because local people decided a former county nursery
+      was worth saving. It has run as a non-profit since 1993 with no federal, state or local
+      government subsidy — volunteers do nearly everything else.
+    </p>
+    
+    <p class="cx-sub" style="margin:.9rem auto 0">
+      
+      Recently: featured in <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/news.html?story=Horticulture" style="color:var(--green);font-weight:700">Horticulture Magazine</a>
+      and on <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/news.html?story=Bay+News" style="color:var(--green);font-weight:700">Bay News 9</a>.
+    </p>
+    <a class="cx-more" target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/contact.html">About the park →</a>
+  </div>
+</section>
+
+<section class="closing-split"><figure><img src="assets/photos/PSBP-00005/662740624.jpg" alt="Queen&#x27;s Crepe Myrtle"><figcaption>Franky McArthur · CC-BY-NC · iNaturalist</figcaption></figure><div class="cx-close" id="closePhoto">
+  <div class="photo-attr photo-attr--muted" id="closeCredit"><span class="attr-species">Queen&#x27;s Crepe Myrtle</span><span class="attr-line">Franky McArthur · CC-BY-NC · iNaturalist</span></div>
+  <div>
+    
+    <h2>Come see for yourself.</h2>
+
+    
+    <p class="cx-tally">How cool is this? So far, <b id="closeObservers">137</b> of you have
+      recorded <b id="closeObs">1,815</b> observations of <b id="closeSpecies">568</b>
+      species in this park on iNaturalist.</p>
+    <p>And the best part: <b id="closePhotos">1,752</b> of those photographs are the images on this site —
+      including the one behind these words — and on the signs in the garden.
+      We swap them out all the time.</p>
+    
+    <p class="cx-keepgoing">Let's <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/get-started.html">keep it going</a> — together.</p>
+  </div>
+</div>
+
+</section>
+<footer id="site-footer">
+  <div class="footer-inat" id="footerInatStrip" style="display:none">
+    <div class="footer-inat-stats">
+      <div class="footer-inat-stat"><strong id="fTotal" class="pulse">—</strong><span>Observations</span></div>
+      <div class="footer-inat-stat"><strong id="fSpecies" class="pulse">—</strong><span>Species</span></div>
+      <div class="footer-inat-stat"><strong id="fObservers" class="pulse">—</strong><span>Observers</span></div>
+      <div class="footer-inat-stat"><strong id="fWeek" class="pulse">—</strong><span>This Week</span></div>
+    </div>
+    <a href="https://www.inaturalist.org/projects/palma-sola-botanical-park" target="_blank" rel="noopener" class="inat-bar-link">
+      📷 Palma Sola on iNaturalist →
+    </a>
+  </div>
+  <div class="footer-grid">
+    <div class="footer-col footer-brand">
+      <img src="assets/images/white_PSBP_logo.png" alt="PSBP" style="height:44px;opacity:.85;margin-bottom:.65rem">
+      <p>A 501(c)(3) nonprofit botanical park on the shore of Palma Sola Bay.<br>
+      Free every day. No government funding. Powered by community.</p>
+      <div class="social-links" style="margin-top:.9rem">
+        <a href="https://www.facebook.com/people/Palma-Sola-Botanical-Park/100064517386906/" target="_blank" rel="noopener" class="social-link">f</a>
+        <a href="https://www.instagram.com/palmasolabotanical/" target="_blank" rel="noopener" class="social-link">ig</a>
+        <a href="https://www.inaturalist.org/projects/palma-sola-botanical-park" target="_blank" rel="noopener" class="social-link">iN</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/index.html#rightNowSection">Right Now</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/nature.html#plants">Plants &amp; Wildlife</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/news.html">Park News</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Plan Your Visit</h4>
+      <ul>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/visit.html">Hours & Directions</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/events.html">Events & Classes</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/venue.html">Venue Rentals</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Get Involved</h4>
+      <ul>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/get-involved.html#donate">Donate</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/get-involved.html#member">Membership</a></li>
+        <li><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/get-involved.html#volunteer">Volunteer</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-util"><a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/contact.html">About</a> · <a target="_blank" rel="noopener" href="https://palma-sola-botanical-park.github.io/explore/contact.html#visit">Contact</a> · © 2026 Palma Sola Botanical Park Foundation, Inc. · 9800 17th Ave NW, Bradenton FL 34209</span>
+    <span style="color:rgba(255,255,255,.3)">Free. Always.</span>
+  </div>
+</footer><script src="review.js"></script></body></html>
